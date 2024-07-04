@@ -1,0 +1,10 @@
+spring:
+  application:
+    name: article
+  datasource:
+    url:
+    username:
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create
