@@ -11,8 +11,12 @@
 <div th:replace="~{fragments/navbar :: nav}"></div>
 <h1 class="text-center" style="margin-top: 300px">게시판에 오신걸 환영합니다.</h1>
 <form class="w-25 mx-auto" style="margin-top: 50px" th:object="${login}" th:method="post" th:action="@{/}">
+    <p class="form-text text-danger" th:if="${#fields.hasGlobalErrors()}" th:each="err : ${#fields.globalErrors()}"
+       th:text="${err}">글로벌 에러 메시지</p>
     <input type="text" class="form-control mb-2" placeholder="아이디" th:field="*{username}">
+    <p class="form-text text-danger" th:errors="*{username}">아이디 에러 메시지</p>
     <input type="password" class="form-control mb-2" placeholder="비밀번호" th:field="*{password}">
+    <p class="form-text text-danger" th:errors="*{password}">비밀번호 에러 메시지</p>
     <button type="submit" class="btn btn-primary w-100 mb-2">로그인</button>
     <a href="/signup" class="btn btn-secondary w-100 mb-2" role="button">회원가입</a>
 </form>

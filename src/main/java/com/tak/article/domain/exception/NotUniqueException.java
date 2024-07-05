@@ -1,4 +1,4 @@
-package com.tak.article.domain.exception.signup;
+package com.tak.article.domain.exception;
 
 public class NotUniqueException extends RuntimeException {
     public NotUniqueException() {

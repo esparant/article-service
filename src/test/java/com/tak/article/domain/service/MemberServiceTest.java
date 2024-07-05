@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.tak.article.domain.entity.Member;
-import com.tak.article.domain.exception.signup.NotUniqueException;
+import com.tak.article.domain.exception.NotUniqueException;
 import com.tak.article.domain.form.SignupForm;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;

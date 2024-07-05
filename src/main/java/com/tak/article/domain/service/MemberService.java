@@ -2,9 +2,7 @@ package com.tak.article.domain.service;
 
 import com.tak.article.domain.entity.Member;
 import com.tak.article.domain.exception.LoginException;
-import com.tak.article.domain.exception.signup.NotUniqueException;
-import com.tak.article.domain.exception.signup.NotUniqueNicknameException;
-import com.tak.article.domain.exception.signup.NotUniqueUsernameException;
+import com.tak.article.domain.exception.NotUniqueException;
 import com.tak.article.domain.form.LoginForm;
 import com.tak.article.domain.repository.MemberRepository;
 import java.util.Optional;
@@ -22,21 +20,16 @@ public class MemberService {
     @Transactional
     public void save(Member member) {
 
-        RuntimeException exception = CheckUnique(member);
+        isUniqueFinalCheck(member);
 
-        if (exception == null) {
-            memberRepository.save(member);
-            return;
-        }
+        memberRepository.save(member);
 
-        throw exception;
     }
 
     public Optional<Member> findById(Long id) {
         return memberRepository.findById(id);
     }
 
-    // ToDo : 중복 버튼 검사용
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
     }
@@ -45,26 +38,20 @@ public class MemberService {
         return memberRepository.findByNickname(nickname);
     }
 
-    private NotUniqueException CheckUnique(Member member) {
-        if (memberRepository.findByUsername(member.getUsername()).isPresent()) {
-            return new NotUniqueUsernameException("아이디 중복");
-        }
-        if(memberRepository.findByNickname(member.getNickname()).isPresent()) {
-            return new NotUniqueNicknameException("닉네임 중복");
-        }
-        return null;
-    }
-
     public Optional<Member> login(LoginForm form) {
         Optional<Member> member = memberRepository.findByUsername(form.getUsername());
 
-        if (member.isEmpty()) {
-            throw new LoginException("아이디가 존재하지 않음");
-        }
-        if (!form.getPassword().equals(member.get().getPassword())) {
-            throw new LoginException("비밀번호 불일치");
+        if (member.isEmpty() || !form.getPassword().equals(member.get().getPassword())) {
+            throw new LoginException();
         }
 
         return member;
+    }
+
+    private void isUniqueFinalCheck(Member member) {
+        if (memberRepository.findByUsername(member.getUsername()).isPresent() ||
+                memberRepository.findByNickname(member.getNickname()).isPresent()) {
+            throw new NotUniqueException("비정상적인 접근");
+        }
     }
 }

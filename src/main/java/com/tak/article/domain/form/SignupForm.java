@@ -1,14 +1,18 @@
 package com.tak.article.domain.form;
 
 import jakarta.validation.constraints.NotBlank;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
 public class SignupForm {
+
+    public SignupForm(String password, String username, String nickname) {
+        this.password = password;
+        this.username = username;
+        this.nickname = nickname;
+    }
 
     @NotBlank
     private String username;

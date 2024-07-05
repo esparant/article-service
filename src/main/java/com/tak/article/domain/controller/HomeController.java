@@ -47,20 +47,20 @@ public class HomeController {
     public String Login(@Valid @ModelAttribute("login") LoginForm form, BindingResult bindingResult,
                         HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
-        try {
-            if (bindingResult.hasErrors()) {
-                redirectAttributes.addFlashAttribute("login", form);
-                getErrorInfo(bindingResult);
-            } else {
-                Optional<Member> loginMember = memberService.login(form);
-                request.getSession().setAttribute(SessionConst.LOGIN_MEMBER, loginMember.orElse(null));
-            }
-        } catch (LoginException e) {
-            bindingResult.addError(new ObjectError("member", "아이디가 존재하지 않거나 비밀번호가 일치하지 않습니다."));
-            redirectAttributes.addFlashAttribute("login", form);
+        if (bindingResult.hasErrors()) {
             getErrorInfo(bindingResult);
+            return "/login/login-home";
         }
-        return "redirect:/";
+
+        try {
+            Optional<Member> loginMember = memberService.login(form);
+            request.getSession().setAttribute(SessionConst.LOGIN_MEMBER, loginMember.orElse(null));
+            return "redirect:/";
+        } catch (LoginException e) {
+            bindingResult.addError(new ObjectError("global", "아이디가 존재하지 않거나 비밀번호가 일치하지 않습니다."));
+            getErrorInfo(bindingResult);
+            return "/login/login-home";
+        }
     }
 
     @PostMapping("/logout")
@@ -69,6 +69,4 @@ public class HomeController {
 
         return "redirect:/";
     }
-
-
 }
