@@ -55,13 +55,16 @@ public class MemberService {
         return null;
     }
 
-    public void login(LoginForm form) {
+    public Optional<Member> login(LoginForm form) {
         Optional<Member> member = memberRepository.findByUsername(form.getUsername());
+
         if (member.isEmpty()) {
             throw new LoginException("아이디가 존재하지 않음");
         }
-        if (form.getPassword().equals(member.get().getPassword())) {
+        if (!form.getPassword().equals(member.get().getPassword())) {
             throw new LoginException("비밀번호 불일치");
         }
+
+        return member;
     }
 }

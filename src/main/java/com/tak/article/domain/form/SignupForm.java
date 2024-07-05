@@ -17,5 +17,8 @@ public class SignupForm {
     private String password;
 
     @NotBlank
+    private String checkPassword;
+
+    @NotBlank
     private String nickname;
 }

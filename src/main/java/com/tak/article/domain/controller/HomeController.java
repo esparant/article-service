@@ -1,14 +1,16 @@
 package com.tak.article.domain.controller;
 
+import static com.tak.article.domain.controller.ControllerMethod.getErrorInfo;
+
 import com.tak.article.domain.entity.Member;
-import com.tak.article.domain.form.LoginForm;
-import com.tak.article.domain.form.SignupForm;
+import com.tak.article.domain.entity.dto.MemberDto;
 import com.tak.article.domain.exception.LoginException;
-import com.tak.article.domain.exception.signup.NotUniqueException;
-import com.tak.article.domain.exception.signup.NotUniqueNicknameException;
-import com.tak.article.domain.exception.signup.NotUniqueUsernameException;
+import com.tak.article.domain.form.LoginForm;
 import com.tak.article.domain.service.MemberService;
+import com.tak.article.domain.session.SessionConst;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -18,76 +20,55 @@ import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.SessionAttribute;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @Slf4j
 @RequiredArgsConstructor
 public class HomeController {
 
-    // ToDo 메시지 언어 설정 해보기
 
     private final MemberService memberService;
 
     @GetMapping
-    public String Home(Model model) {
-        model.addAttribute("login", new LoginForm());
+    public String Home(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member
+            , @ModelAttribute("login") LoginForm form, Model model) {
 
-        // TODO : 세션 여부에 따라 다른 view 만들기
-        return "login/login-home";
+        if (member == null) {
+            return "login/login-home";
+        }
+
+        model.addAttribute("member", new MemberDto(member));
+        return "user/user-home";
     }
 
     @PostMapping
-    public String Login(@Valid @ModelAttribute("login") LoginForm form, BindingResult bindingResult) {
-        if (bindingResult.hasErrors()) {
-            getErrorInfo(bindingResult);
-            return "login/login-home";
-        }
+    public String Login(@Valid @ModelAttribute("login") LoginForm form, BindingResult bindingResult,
+                        HttpServletRequest request, RedirectAttributes redirectAttributes) {
 
         try {
-            memberService.login(form);
-            return "redirect:/";
+            if (bindingResult.hasErrors()) {
+                redirectAttributes.addFlashAttribute("login", form);
+                getErrorInfo(bindingResult);
+            } else {
+                Optional<Member> loginMember = memberService.login(form);
+                request.getSession().setAttribute(SessionConst.LOGIN_MEMBER, loginMember.orElse(null));
+            }
         } catch (LoginException e) {
-            bindingResult.addError(new ObjectError("member", "아이디가 존재하지 않거나 비밀번호가 맞지 않습니다."));
+            bindingResult.addError(new ObjectError("member", "아이디가 존재하지 않거나 비밀번호가 일치하지 않습니다."));
+            redirectAttributes.addFlashAttribute("login", form);
             getErrorInfo(bindingResult);
-            return "login/login-home";
         }
+        return "redirect:/";
     }
 
-    @GetMapping("/signup")
-    public String SignUp(Model model) {
-        model.addAttribute("signup", new SignupForm());
-        return "login/sign-up";
+    @PostMapping("/logout")
+    public String Logout(HttpServletRequest request) {
+        request.getSession().removeAttribute(SessionConst.LOGIN_MEMBER);
+
+        return "redirect:/";
     }
 
-    @PostMapping("/signup")
-    public String SignUp(@Valid @ModelAttribute("signup") SignupForm form, BindingResult bindingResult) {
 
-        if (bindingResult.hasErrors()) {
-            getErrorInfo(bindingResult);
-            return "login/sign-up";
-        }
-
-        // ToDo 중복 검사 버튼으로 대체하기 (아이디, 닉네임)
-        try {
-            memberService.save(new Member(form));
-            return "redirect:/signup?success";
-        } catch (NotUniqueException e) {
-            bindingResult.addError(new ObjectError("member", checkNotUniqueException(e)));
-            return "login/sign-up";
-        }
-    }
-
-    private String checkNotUniqueException(NotUniqueException e) {
-        if (e instanceof NotUniqueUsernameException) {
-            return "중복된 아이디 입니다.";
-        }
-        if (e instanceof NotUniqueNicknameException) {
-            return "중복된 닉네임 입니다.";
-        }
-        return null;
-    }
-
-    private static void getErrorInfo(BindingResult bindingResult) {
-        log.info("errors: {}", bindingResult.getAllErrors());
-    }
 }

@@ -11,12 +11,29 @@
 <div th:replace="~{fragments/navbar :: nav}"></div>
 <h1 class="text-center" style="margin-top: 300px">회원가입</h1>
 <form class="w-25 mx-auto" style="margin-top: 50px" th:object="${signup}" th:method="post" th:action="@{/signup}">
-    <input type="text" class="form-control mb-2" placeholder="아이디" th:field="*{username}">
-    <input type="password" class="form-control mb-2" placeholder="비밀번호" th:field="*{password}">
-    <input type="text" class="form-control mb-2" placeholder="닉네임" th:field="*{nickname}">
-    <button type="submit" class="btn btn-primary w-100 mb-2">회원가입</button>
+    <div class="input-group mb-2">
+        <input type="text" class="form-control" placeholder="아이디" id="username" th:field="*{username}" oninput="checkFormValidity()">
+        <button type="button" class="btn btn-outline-secondary" onclick="checkDuplicate('username')">중복검사</button>
+    </div>
+    <div class="input-group mb-2">
+        <input type="password" class="form-control" id="password" placeholder="비밀번호" th:field="*{password}" oninput="checkFormValidity()">
+    </div>
+    <div class="input-group mb-2">
+        <input type="password" class="form-control" id="checkPassword" placeholder="비밀번호 확인" th:field="*{checkPassword}" oninput="checkFormValidity()">
+    </div>
+    <div id="passwordMessage" class="text-danger" style="display: none;"></div>
+    <div class="input-group mb-2">
+        <input type="text" class="form-control" placeholder="닉네임" id="nickname" th:field="*{nickname}" oninput="checkFormValidity()">
+        <button type="button" class="btn btn-outline-secondary" onclick="checkDuplicate('nickname')">중복검사</button>
+    </div>
+    <button type="submit" class="btn btn-primary w-100 mb-2" id="signupButton" disabled>회원가입</button>
 </form>
+
 <script>
+    let isUsernameValid = false;
+    let isPasswordValid = false;
+    let isNicknameValid = false;
+
     document.addEventListener("DOMContentLoaded", function () {
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('success')) {
@@ -33,6 +50,79 @@
             window.location.href = '/';
         }
     });
+
+    function checkDuplicate(field) {
+        const inputField = document.getElementById(field);
+        const value = inputField ? inputField.value : null;
+
+        if (!value) {
+            if (field === 'username') {
+                alert('아이디를 입력하세요.');
+                return;
+            } else if (field === 'nickname') {
+                alert('닉네임을 입력하세요.');
+                return;
+            }
+        }
+
+        console.log(`Checking ${field}: ${value}`);
+
+        fetch(`/sign-up/check?key=` + field + `&value=${encodeURIComponent(value)}`, {
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response data:', data);
+                alert(data.message);
+
+                if (field === 'username') {
+                    isUsernameValid = data.message === '사용 가능한 아이디입니다.';
+                } else if (field === 'nickname') {
+                    isNicknameValid = data.message === '사용 가능한 닉네임입니다.';
+                }
+
+                checkFormValidity();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('중복 검사를 실패했습니다.');
+            });
+    }
+
+    function checkPasswords() {
+        const passwordField = document.getElementById('password');
+        const checkPasswordField = document.getElementById('checkPassword');
+        const passwordMessage = document.getElementById('passwordMessage');
+
+        const password = passwordField.value;
+        const checkPassword = checkPasswordField.value;
+
+        if (!checkPassword) {
+            passwordMessage.style.display = 'none';
+        } else if (password !== checkPassword) {
+            passwordMessage.style.display = 'block';
+            passwordMessage.textContent = '비밀번호가 일치하지 않습니다.';
+            passwordMessage.classList.remove('text-success');
+            passwordMessage.classList.add('text-danger');
+            isPasswordValid = false;
+        } else {
+            passwordMessage.style.display = 'block';
+            passwordMessage.textContent = '비밀번호가 일치합니다.';
+            passwordMessage.classList.remove('text-danger');
+            passwordMessage.classList.add('text-success');
+            isPasswordValid = true;
+        }
+
+        checkFormValidity();
+    }
+
+    document.getElementById('password').addEventListener('input', checkPasswords);
+    document.getElementById('checkPassword').addEventListener('input', checkPasswords);
+
+    function checkFormValidity() {
+        const signupButton = document.getElementById('signupButton');
+        signupButton.disabled = !(isUsernameValid && isPasswordValid && isNicknameValid);
+    }
 </script>
 </body>
 </html>
