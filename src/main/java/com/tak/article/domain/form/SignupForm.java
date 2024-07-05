@@ -8,9 +8,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SignupForm {
 
-    public SignupForm(String password, String username, String nickname) {
-        this.password = password;
+    public SignupForm(String username, String password, String nickname) {
         this.username = username;
+        this.password = password;
         this.nickname = nickname;
     }
 

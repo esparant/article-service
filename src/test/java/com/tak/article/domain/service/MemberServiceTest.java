@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.tak.article.domain.entity.Member;
+import com.tak.article.domain.exception.LoginException;
 import com.tak.article.domain.exception.NotUniqueException;
 import com.tak.article.domain.form.LoginForm;
 import com.tak.article.domain.form.SignupForm;
@@ -66,7 +67,16 @@ class MemberServiceTest {
 
         Optional<Member> result = memberService.login(new LoginForm("user1", "123"));
 
+        assertThat(result.get()).isEqualTo(member);
+    }
 
+    @Test
+    @DisplayName("비정상 로그인")
+    void login_fail() {
+        Member member = new Member(new SignupForm("user1", "123", "hello"));
+        memberService.save(member);
+        assertThatThrownBy(() -> memberService.login(new LoginForm("user2", "123")))
+                .isInstanceOf(LoginException.class);
 
     }
 }
