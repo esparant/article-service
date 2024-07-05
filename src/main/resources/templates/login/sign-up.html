@@ -14,7 +14,8 @@
     <div class="input-group mb-2">
         <input type="text" class="form-control" placeholder="아이디" id="username" th:field="*{username}"
                oninput="invalidateUsername()">
-        <button type="button" class="btn btn-outline-secondary" onclick="checkDuplicate('username')">중복검사</button>
+        <button type="button" class="btn btn-outline-secondary" onclick="checkUsernameDuplicate('username')">중복검사
+        </button>
     </div>
     <div id="usernameMessage" class="text-danger mb-2" style="display: none;"></div>
     <div class="input-group mb-2">
@@ -30,7 +31,7 @@
     <div class="input-group mb-2">
         <input type="text" class="form-control" placeholder="닉네임" id="nickname" th:field="*{nickname}"
                oninput="invalidateNickname()">
-        <button type="button" class="btn btn-outline-secondary" onclick="checkDuplicate('nickname')">중복검사</button>
+        <button type="button" class="btn btn-outline-secondary" onclick="checkNicknameDuplicate('nickname')">중복검사</button>
     </div>
     <div id="nicknameMessage" class="text-danger mb-2" style="display: none;"></div>
     <button type="submit" class="btn btn-primary w-100 mb-2" id="signupButton" disabled>회원가입</button>
@@ -44,9 +45,16 @@
     document.addEventListener("DOMContentLoaded", function () {
         const urlParams = new URLSearchParams(window.location.search);
         if (urlParams.has('success')) {
-            alert('회원가입이 완료되었습니다.');
-            // Redirect to the homepage
-            window.location.href = '/';
+            // Remove 'success' parameter and update the URL without reloading the page
+            urlParams.delete('success');
+            const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+            window.history.replaceState({}, document.title, newUrl);
+
+            // Show alert and then redirect
+            setTimeout(() => {
+                alert('회원가입이 완료되었습니다.');
+                window.location.href = '/';
+            }, 0);
         }
     });
 
@@ -64,23 +72,18 @@
         checkFormValidity();
     }
 
-    function checkDuplicate(field) {
+    function checkUsernameDuplicate(field) {
         const inputField = document.getElementById(field);
         const value = inputField ? inputField.value : null;
 
         if (!value) {
-            if (field === 'username') {
-                alert('아이디를 입력하세요.');
-                return;
-            } else if (field === 'nickname') {
-                alert('닉네임을 입력하세요.');
-                return;
-            }
+            alert('아이디를 입력하세요.');
+            return;
         }
 
         console.log(`Checking ${field}: ${value}`);
 
-        fetch(`/sign-up/check?key=` + field + `&value=${encodeURIComponent(value)}`, {
+        fetch(`/sign-up/check?key=username&value=${encodeURIComponent(value)}`, {
             method: 'GET'
         })
             .then(response => response.json())
@@ -89,13 +92,53 @@
                 alert(data.message);
 
                 const messageField = document.getElementById(field + 'Message');
-                if (field === 'username') {
-                    isUsernameValid = data.message === '사용 가능한 아이디입니다.';
-                } else if (field === 'nickname') {
-                    isNicknameValid = data.message === '사용 가능한 닉네임입니다.';
+                isUsernameValid = data.message === '사용 가능한 아이디입니다.';
+
+
+                if (isUsernameValid) {
+                    messageField.style.display = 'block';
+                    messageField.textContent = '중복검사가 완료되었습니다.';
+                    messageField.classList.remove('text-danger');
+                    messageField.classList.add('text-success');
+                } else {
+                    messageField.style.display = 'block';
+                    messageField.textContent = '중복검사가 완료되지 않았습니다.';
+                    messageField.classList.remove('text-success');
+                    messageField.classList.add('text-danger');
                 }
 
-                if (isUsernameValid || isNicknameValid) {
+                checkFormValidity();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('중복 검사를 실패했습니다.');
+            });
+    }
+
+    function checkNicknameDuplicate(field) {
+        const inputField = document.getElementById(field);
+        const value = inputField ? inputField.value : null;
+
+        if (!value) {
+            alert('닉네임 입력하세요.');
+            return;
+        }
+
+        console.log(`Checking ${field}: ${value}`);
+
+        fetch(`/sign-up/check?key=nickname&value=${encodeURIComponent(value)}`, {
+            method: 'GET'
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Response data:', data);
+                alert(data.message);
+
+                const messageField = document.getElementById(field + 'Message');
+                isNicknameValid = data.message === '사용 가능한 닉네임입니다.';
+
+
+                if (isNicknameValid) {
                     messageField.style.display = 'block';
                     messageField.textContent = '중복검사가 완료되었습니다.';
                     messageField.classList.remove('text-danger');

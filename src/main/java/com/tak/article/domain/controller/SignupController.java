@@ -19,7 +19,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
@@ -36,8 +35,7 @@ public class SignupController {
     }
 
     @PostMapping("/signup")
-    public String SignUp(@Valid @ModelAttribute("signup") SignupForm form, BindingResult bindingResult,
-                         RedirectAttributes redirectAttributes) {
+    public String SignUp(@Valid @ModelAttribute("signup") SignupForm form, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             bindingResult.addError(new ObjectError("signup", "올바른 접근으로 가입해주세요."));
             getErrorInfo(bindingResult);

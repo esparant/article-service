@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.SessionAttribute;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @Slf4j
@@ -32,20 +31,20 @@ public class HomeController {
     private final MemberService memberService;
 
     @GetMapping
-    public String Home(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) Member member
+    public String Home(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto
             , @ModelAttribute("login") LoginForm form, Model model) {
 
-        if (member == null) {
+        if (memberDto == null) {
             return "login/login-home";
         }
 
-        model.addAttribute("member", new MemberDto(member));
+        model.addAttribute("member", memberDto);
         return "user/user-home";
     }
 
     @PostMapping
     public String Login(@Valid @ModelAttribute("login") LoginForm form, BindingResult bindingResult,
-                        HttpServletRequest request, RedirectAttributes redirectAttributes) {
+                        HttpServletRequest request) {
 
         if (bindingResult.hasErrors()) {
             getErrorInfo(bindingResult);
@@ -54,7 +53,10 @@ public class HomeController {
 
         try {
             Optional<Member> loginMember = memberService.login(form);
-            request.getSession().setAttribute(SessionConst.LOGIN_MEMBER, loginMember.orElse(null));
+
+            Member member = loginMember.orElseThrow(LoginException::new);
+            request.getSession().setAttribute(SessionConst.LOGIN_MEMBER, new MemberDto(member));
+
             return "redirect:/";
         } catch (LoginException e) {
             bindingResult.addError(new ObjectError("global", "아이디가 존재하지 않거나 비밀번호가 일치하지 않습니다."));

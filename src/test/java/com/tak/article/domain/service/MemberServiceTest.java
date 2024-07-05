@@ -6,6 +6,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.tak.article.domain.entity.Member;
 import com.tak.article.domain.exception.NotUniqueException;
+import com.tak.article.domain.form.LoginForm;
 import com.tak.article.domain.form.SignupForm;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
@@ -58,7 +59,14 @@ class MemberServiceTest {
     }
 
     @Test
+    @DisplayName("정상 로그인")
     void login() {
+        Member member = new Member(new SignupForm("user1", "123", "hello"));
+        memberService.save(member);
+
+        Optional<Member> result = memberService.login(new LoginForm("user1", "123"));
+
+
 
     }
 }
