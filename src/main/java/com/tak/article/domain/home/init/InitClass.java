@@ -1,8 +1,8 @@
-package com.tak.article.domain.init;
+package com.tak.article.domain.home.init;
 
-import com.tak.article.domain.entity.Member;
-import com.tak.article.domain.form.SignupForm;
-import com.tak.article.domain.repository.MemberRepository;
+import com.tak.article.domain.member.entity.Member;
+import com.tak.article.domain.home.form.SignupForm;
+import com.tak.article.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.annotation.Profile;

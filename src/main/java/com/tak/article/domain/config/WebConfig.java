@@ -1,7 +1,7 @@
 package com.tak.article.domain.config;
 
-import com.tak.article.domain.interceptor.LoginCheckInterceptor;
-import com.tak.article.domain.interceptor.LoginUserCheckInterceptor;
+import com.tak.article.domain.home.interceptor.LoginCheckInterceptor;
+import com.tak.article.domain.home.interceptor.LoginUserCheckInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;

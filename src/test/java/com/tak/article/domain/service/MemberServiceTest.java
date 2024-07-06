@@ -4,11 +4,12 @@ package com.tak.article.domain.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.tak.article.domain.entity.Member;
-import com.tak.article.domain.exception.LoginException;
-import com.tak.article.domain.exception.NotUniqueException;
-import com.tak.article.domain.form.LoginForm;
-import com.tak.article.domain.form.SignupForm;
+import com.tak.article.domain.member.entity.Member;
+import com.tak.article.domain.home.exception.LoginException;
+import com.tak.article.domain.home.exception.NotUniqueException;
+import com.tak.article.domain.home.form.LoginForm;
+import com.tak.article.domain.home.form.SignupForm;
+import com.tak.article.domain.member.service.MemberService;
 import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

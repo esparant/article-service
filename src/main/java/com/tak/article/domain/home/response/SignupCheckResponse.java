@@ -1,4 +1,4 @@
-package com.tak.article.domain.response;
+package com.tak.article.domain.home.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

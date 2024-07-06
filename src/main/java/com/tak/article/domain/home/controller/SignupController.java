@@ -1,12 +1,10 @@
-package com.tak.article.domain.controller;
+package com.tak.article.domain.home.controller;
 
-import static com.tak.article.domain.controller.ControllerMethod.getErrorInfo;
-
-import com.tak.article.domain.entity.Member;
-import com.tak.article.domain.exception.NotUniqueException;
-import com.tak.article.domain.form.SignupForm;
-import com.tak.article.domain.response.SignupCheckResponse;
-import com.tak.article.domain.service.MemberService;
+import com.tak.article.domain.member.entity.Member;
+import com.tak.article.domain.home.exception.NotUniqueException;
+import com.tak.article.domain.home.form.SignupForm;
+import com.tak.article.domain.home.response.SignupCheckResponse;
+import com.tak.article.domain.member.service.MemberService;
 import jakarta.validation.Valid;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +36,7 @@ public class SignupController {
     public String signUp(@Valid @ModelAttribute("signup") SignupForm form, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             bindingResult.addError(new ObjectError("signup", "올바른 접근으로 가입해주세요."));
-            getErrorInfo(bindingResult);
+            ControllerMethod.getErrorInfo(bindingResult);
             return "login/sign-up";
         }
 

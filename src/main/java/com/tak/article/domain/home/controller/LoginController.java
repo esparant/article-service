@@ -1,13 +1,13 @@
-package com.tak.article.domain.controller;
+package com.tak.article.domain.home.controller;
 
-import static com.tak.article.domain.controller.ControllerMethod.getErrorInfo;
+import static com.tak.article.domain.home.controller.ControllerMethod.getErrorInfo;
 
-import com.tak.article.domain.entity.Member;
-import com.tak.article.domain.entity.dto.MemberDto;
-import com.tak.article.domain.exception.LoginException;
-import com.tak.article.domain.form.LoginForm;
-import com.tak.article.domain.service.MemberService;
-import com.tak.article.domain.session.SessionConst;
+import com.tak.article.domain.member.entity.Member;
+import com.tak.article.domain.member.entity.dto.MemberDto;
+import com.tak.article.domain.home.exception.LoginException;
+import com.tak.article.domain.home.form.LoginForm;
+import com.tak.article.domain.member.service.MemberService;
+import com.tak.article.domain.member.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.Optional;

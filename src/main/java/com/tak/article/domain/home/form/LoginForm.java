@@ -1,4 +1,4 @@
-package com.tak.article.domain.form;
+package com.tak.article.domain.home.form;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

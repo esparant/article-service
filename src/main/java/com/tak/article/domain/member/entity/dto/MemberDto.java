@@ -1,6 +1,6 @@
-package com.tak.article.domain.entity.dto;
+package com.tak.article.domain.member.entity.dto;
 
-import com.tak.article.domain.entity.Member;
+import com.tak.article.domain.member.entity.Member;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 

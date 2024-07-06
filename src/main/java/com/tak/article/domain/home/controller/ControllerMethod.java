@@ -1,6 +1,6 @@
-package com.tak.article.domain.controller;
+package com.tak.article.domain.home.controller;
 
-import com.tak.article.domain.service.MemberService;
+import com.tak.article.domain.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;

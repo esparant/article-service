@@ -1,4 +1,4 @@
-package com.tak.article.domain.exception;
+package com.tak.article.domain.home.exception;
 
 public class LoginException extends RuntimeException {
     public LoginException() {

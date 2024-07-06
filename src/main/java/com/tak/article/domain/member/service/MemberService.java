@@ -1,10 +1,10 @@
-package com.tak.article.domain.service;
+package com.tak.article.domain.member.service;
 
-import com.tak.article.domain.entity.Member;
-import com.tak.article.domain.exception.LoginException;
-import com.tak.article.domain.exception.NotUniqueException;
-import com.tak.article.domain.form.LoginForm;
-import com.tak.article.domain.repository.MemberRepository;
+import com.tak.article.domain.member.entity.Member;
+import com.tak.article.domain.home.exception.LoginException;
+import com.tak.article.domain.home.exception.NotUniqueException;
+import com.tak.article.domain.home.form.LoginForm;
+import com.tak.article.domain.member.repository.MemberRepository;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package com.tak.article.domain.controller;
+package com.tak.article.domain.home.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

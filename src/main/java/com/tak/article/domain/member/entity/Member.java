@@ -1,6 +1,6 @@
-package com.tak.article.domain.entity;
+package com.tak.article.domain.member.entity;
 
-import com.tak.article.domain.form.SignupForm;
+import com.tak.article.domain.home.form.SignupForm;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
