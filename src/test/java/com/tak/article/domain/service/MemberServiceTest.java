@@ -22,7 +22,6 @@ class MemberServiceTest {
 
     @Autowired
     MemberService memberService;
-
     @Test
     @DisplayName("회원 등록 테스트")
     void saveMember() {

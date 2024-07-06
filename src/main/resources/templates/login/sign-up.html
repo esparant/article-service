@@ -92,7 +92,7 @@
                 alert(data.message);
 
                 const messageField = document.getElementById(field + 'Message');
-                isUsernameValid = data.message === '사용 가능한 아이디입니다.';
+                isUsernameValid = data.success;
 
 
                 if (isUsernameValid) {
@@ -135,7 +135,7 @@
                 alert(data.message);
 
                 const messageField = document.getElementById(field + 'Message');
-                isNicknameValid = data.message === '사용 가능한 닉네임입니다.';
+                isNicknameValid = data.success;
 
 
                 if (isNicknameValid) {

@@ -5,7 +5,7 @@ import static com.tak.article.domain.controller.ControllerMethod.getErrorInfo;
 import com.tak.article.domain.entity.Member;
 import com.tak.article.domain.exception.NotUniqueException;
 import com.tak.article.domain.form.SignupForm;
-import com.tak.article.domain.response.MemberCheckResponse;
+import com.tak.article.domain.response.SignupCheckResponse;
 import com.tak.article.domain.service.MemberService;
 import jakarta.validation.Valid;
 import java.util.Optional;
@@ -53,21 +53,21 @@ public class SignupController {
     }
 
     @GetMapping("/sign-up/check")
-    public ResponseEntity<MemberCheckResponse> checkUsername(@RequestParam("key") String key,
+    public ResponseEntity<SignupCheckResponse> checkUsername(@RequestParam("key") String key,
                                                              @RequestParam("value") String value) {
         return checkUnique(key, value);
     }
 
-    private ResponseEntity<MemberCheckResponse> checkUnique(String key, String value) {
+    private ResponseEntity<SignupCheckResponse> checkUnique(String key, String value) {
         Optional<Member> member;
         if (key.equals("username")) {
             member = memberService.findByUsername(value);
-            return member.isPresent() ? ResponseEntity.ok(new MemberCheckResponse(false, "이미 존재하는 아이디입니다"))
-                    : ResponseEntity.ok(new MemberCheckResponse(true, "사용 가능한 아이디입니다."));
+            return member.isPresent() ? ResponseEntity.ok(new SignupCheckResponse(false, "이미 존재하는 아이디입니다"))
+                    : ResponseEntity.ok(new SignupCheckResponse(true, "사용 가능한 아이디입니다."));
         } else {
             member = memberService.findByNickname(value);
-            return member.isPresent() ? ResponseEntity.ok(new MemberCheckResponse(false, "이미 존재하는 닉네임입니다"))
-                    : ResponseEntity.ok(new MemberCheckResponse(true, "사용 가능한 닉네임입니다."));
+            return member.isPresent() ? ResponseEntity.ok(new SignupCheckResponse(false, "이미 존재하는 닉네임입니다"))
+                    : ResponseEntity.ok(new SignupCheckResponse(true, "사용 가능한 닉네임입니다."));
         }
     }
 }

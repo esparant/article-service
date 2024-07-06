@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberCheckResponse {
+public class SignupCheckResponse {
 
     private boolean success;
     private String message;
