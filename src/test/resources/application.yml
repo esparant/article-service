@@ -9,8 +9,4 @@ spring:
     hibernate:
       ddl-auto: create
   profiles:
-    active: dev
-server:
-  servlet:
-    session:
-      tracking-modes: cookie
+    active: test

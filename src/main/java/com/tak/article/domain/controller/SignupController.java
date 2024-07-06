@@ -29,13 +29,13 @@ public class SignupController {
 
 
     @GetMapping("/signup")
-    public String SignUp(Model model, @ModelAttribute("signup") SignupForm signupForm) {
+    public String signup(Model model, @ModelAttribute("signup") SignupForm signupForm) {
         model.addAttribute("signup", signupForm);
         return "login/sign-up";
     }
 
     @PostMapping("/signup")
-    public String SignUp(@Valid @ModelAttribute("signup") SignupForm form, BindingResult bindingResult) {
+    public String signUp(@Valid @ModelAttribute("signup") SignupForm form, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             bindingResult.addError(new ObjectError("signup", "올바른 접근으로 가입해주세요."));
             getErrorInfo(bindingResult);
@@ -47,7 +47,7 @@ public class SignupController {
             return "redirect:/signup?success";
 
         } catch (NotUniqueException e) {
-            bindingResult.addError(new ObjectError("signup", "올바른 접근으로 가입해주세요."));
+            bindingResult.reject("signup", "올바른 접근으로 가입해주세요.");
             return "login/sign-up";
         }
     }
@@ -59,6 +59,7 @@ public class SignupController {
     }
 
     private ResponseEntity<SignupCheckResponse> checkUnique(String key, String value) {
+
         Optional<Member> member;
         if (key.equals("username")) {
             member = memberService.findByUsername(value);
