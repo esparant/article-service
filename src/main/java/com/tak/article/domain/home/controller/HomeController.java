@@ -1,8 +1,9 @@
 package com.tak.article.domain.home.controller;
 
-import com.tak.article.domain.member.entity.dto.MemberDto;
+import static com.tak.article.domain.home.controller.HomeControllerMethod.ExistSignupSuccess;
+
 import com.tak.article.domain.home.form.LoginForm;
-import com.tak.article.domain.member.service.MemberService;
+import com.tak.article.domain.member.entity.dto.MemberDto;
 import com.tak.article.domain.member.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +20,13 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 @RequiredArgsConstructor
 public class HomeController {
 
-
-    private final MemberService memberService;
-
     @GetMapping("/")
     public String home(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto,
-                       @ModelAttribute("login") LoginForm form, Model model) {
+                       @ModelAttribute("login") LoginForm form, Model model,
+                       HttpServletRequest request) {
+
+        ExistSignupSuccess(model, request);
+
         if (memberDto == null) {
             return "home";
         }
@@ -32,6 +34,7 @@ public class HomeController {
         model.addAttribute("member", memberDto);
         return "user/user-home";
     }
+
 
     @PostMapping("/logout")
     public String logout(HttpServletRequest request) {

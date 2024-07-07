@@ -27,11 +27,6 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             return false;
         }
 
-        if (session.getAttribute(SessionConst.LOGIN_MEMBER) == null && requestURI.equals("/signup") && parameterNames.hasMoreElements()) {
-            response.sendRedirect("/signup");
-            return false;
-        }
-
         return true;
     }
 }

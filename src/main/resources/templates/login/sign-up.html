@@ -10,7 +10,7 @@
 <body>
 <div th:replace="~{fragments/navbar :: nav}"></div>
 <h1 class="text-center" style="margin-top: 300px">회원가입</h1>
-<form class="w-25 mx-auto" style="margin-top: 50px" th:object="${signup}" th:method="post" th:action="@{/signup}">
+<form class="w-25 mx-auto" style="margin-top: 50px" th:object="${signup}" th:method="post">
     <div class="input-group mb-2">
         <input type="text" class="form-control" placeholder="아이디" id="username" th:field="*{username}"
                oninput="invalidateUsername()">
@@ -31,7 +31,8 @@
     <div class="input-group mb-2">
         <input type="text" class="form-control" placeholder="닉네임" id="nickname" th:field="*{nickname}"
                oninput="invalidateNickname()">
-        <button type="button" class="btn btn-outline-secondary" onclick="checkNicknameDuplicate('nickname')">중복검사</button>
+        <button type="button" class="btn btn-outline-secondary" onclick="checkNicknameDuplicate('nickname')">중복검사
+        </button>
     </div>
     <div id="nicknameMessage" class="text-danger mb-2" style="display: none;"></div>
     <button type="submit" class="btn btn-primary w-100 mb-2" id="signupButton" disabled>회원가입</button>
@@ -42,21 +43,22 @@
     let isPasswordValid = false;
     let isNicknameValid = false;
 
-    document.addEventListener("DOMContentLoaded", function () {
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.has('success')) {
-            // Remove 'success' parameter and update the URL without reloading the page
-            urlParams.delete('success');
-            const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
-            window.history.replaceState({}, document.title, newUrl);
 
-            // Show alert and then redirect
-            setTimeout(() => {
-                alert('회원가입이 완료되었습니다.');
-                window.location.href = '/';
-            }, 0);
-        }
-    });
+    // document.addEventListener("DOMContentLoaded", function () {
+    //     const urlParams = new URLSearchParams(window.location.search);
+    //     if (urlParams.has('success')) {
+    //         // Remove 'success' parameter and update the URL without reloading the page
+    //         urlParams.delete('success');
+    //         const newUrl = window.location.pathname + (urlParams.toString() ? '?' + urlParams.toString() : '');
+    //         window.history.replaceState({}, document.title, newUrl);
+    //
+    //         // Show alert and then redirect
+    //         setTimeout(() => {
+    //             alert('회원가입이 완료되었습니다.');
+    //             window.location.href = '/';
+    //         }, 0);
+    //     }
+    // });
 
     function invalidateUsername() {
         isUsernameValid = false;

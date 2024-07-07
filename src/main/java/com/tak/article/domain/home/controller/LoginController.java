@@ -1,6 +1,6 @@
 package com.tak.article.domain.home.controller;
 
-import static com.tak.article.domain.home.controller.ControllerMethod.getErrorInfo;
+import static com.tak.article.domain.home.controller.HomeControllerMethod.getErrorInfo;
 
 import com.tak.article.domain.member.entity.Member;
 import com.tak.article.domain.member.entity.dto.MemberDto;
@@ -50,7 +50,6 @@ public class LoginController {
 
             Member member = loginMember.orElseThrow(LoginException::new);
             request.getSession().setAttribute(SessionConst.LOGIN_MEMBER, new MemberDto(member));
-
             return "redirect:" + redirectUrl;
         } catch (LoginException e) {
             bindingResult.reject("loginFail", "아이디가 존재하지 않거나 비밀번호가 일치하지 않습니다.");

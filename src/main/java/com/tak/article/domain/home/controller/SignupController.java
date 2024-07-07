@@ -1,9 +1,9 @@
 package com.tak.article.domain.home.controller;
 
-import com.tak.article.domain.member.entity.Member;
 import com.tak.article.domain.home.exception.NotUniqueException;
 import com.tak.article.domain.home.form.SignupForm;
 import com.tak.article.domain.home.response.SignupCheckResponse;
+import com.tak.article.domain.member.entity.Member;
 import com.tak.article.domain.member.service.MemberService;
 import jakarta.validation.Valid;
 import java.util.Optional;
@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 
 @Controller
@@ -33,16 +34,18 @@ public class SignupController {
     }
 
     @PostMapping("/signup")
-    public String signUp(@Valid @ModelAttribute("signup") SignupForm form, BindingResult bindingResult) {
+    public String signUp(@Valid @ModelAttribute("signup") SignupForm form, BindingResult bindingResult,
+                         RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             bindingResult.addError(new ObjectError("signup", "올바른 접근으로 가입해주세요."));
-            ControllerMethod.getErrorInfo(bindingResult);
+            HomeControllerMethod.getErrorInfo(bindingResult);
             return "login/sign-up";
         }
 
         try {
             memberService.save(new Member(form));
-            return "redirect:/signup?success";
+            redirectAttributes.addFlashAttribute("success", true);
+            return "redirect:/";
 
         } catch (NotUniqueException e) {
             bindingResult.reject("signup", "올바른 접근으로 가입해주세요.");
