@@ -9,16 +9,22 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
 
+    private static final String[] GUEST_PATTERNS = {
+            "/", "/error", "/login", "/signup", "/sign-up/check"};
+    private static final String[] MEMBER_PATTERNS = {
+            "/", "/error", "/logout", "/article", "/post",
+            "/post/**"};
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginCheckInterceptor())
                 .order(1)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/", "/error", "/login");
+                .excludePathPatterns(GUEST_PATTERNS);
 
         registry.addInterceptor(new LoginUserCheckInterceptor())
                 .order(2)
                 .addPathPatterns("/**")
-                .excludePathPatterns("/", "/error", "/logout", "/article");
+                .excludePathPatterns(MEMBER_PATTERNS);
     }
 }

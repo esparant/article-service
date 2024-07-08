@@ -1,6 +1,6 @@
 package com.tak.article.domain.home.controller;
 
-import static com.tak.article.domain.home.controller.HomeControllerMethod.ExistSignupSuccess;
+import static com.tak.article.domain.home.controller.ControllerMethod.checkSignupSuccess;
 
 import com.tak.article.domain.home.form.LoginForm;
 import com.tak.article.domain.member.entity.dto.MemberDto;
@@ -25,7 +25,7 @@ public class HomeController {
                        @ModelAttribute("login") LoginForm form, Model model,
                        HttpServletRequest request) {
 
-        ExistSignupSuccess(model, request);
+        checkSignupSuccess(model, request);
 
         if (memberDto == null) {
             return "home";

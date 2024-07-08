@@ -1,6 +1,6 @@
 package com.tak.article.domain.home.controller;
 
-import static com.tak.article.domain.home.controller.HomeControllerMethod.getErrorInfo;
+import static com.tak.article.domain.home.controller.ControllerMethod.getErrorInfo;
 
 import com.tak.article.domain.member.entity.Member;
 import com.tak.article.domain.member.entity.dto.MemberDto;

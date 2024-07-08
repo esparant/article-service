@@ -38,7 +38,7 @@ public class SignupController {
                          RedirectAttributes redirectAttributes) {
         if (bindingResult.hasErrors()) {
             bindingResult.addError(new ObjectError("signup", "올바른 접근으로 가입해주세요."));
-            HomeControllerMethod.getErrorInfo(bindingResult);
+            ControllerMethod.getErrorInfo(bindingResult);
             return "login/sign-up";
         }
 

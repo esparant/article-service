@@ -13,12 +13,12 @@ import org.springframework.stereotype.Component;
 @Component
 @Profile("dev")
 @RequiredArgsConstructor
-public class InitClass {
+public class MemberInitClass {
 
     private final MemberRepository repository;
 
     @EventListener(ApplicationReadyEvent.class)
-    public void init() {
+    private void init() {
         repository.save(new Member(new SignupForm("test123", "123", "test")));
     }
 }

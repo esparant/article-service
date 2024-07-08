@@ -5,7 +5,6 @@ import com.tak.article.domain.member.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.Enumeration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerInterceptor;
 
@@ -18,12 +17,16 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
 
         HttpSession session = request.getSession();
         String requestURI = request.getRequestURI();
-        Enumeration<String> parameterNames = request.getParameterNames();
 
         log.info("whats url = {}", requestURI);
 
         if (session.getAttribute(SessionConst.LOGIN_MEMBER) == null && requestURI.equals("/logout")) {
             response.sendRedirect("/");
+            return false;
+        }
+
+        if (session.getAttribute(SessionConst.LOGIN_MEMBER) == null) {
+            response.sendRedirect("/login?redirectURL=" + requestURI);
             return false;
         }
 
