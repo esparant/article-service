@@ -6,7 +6,6 @@ import com.tak.article.domain.article.form.PostForm;
 import com.tak.article.domain.article.service.ArticleService;
 import com.tak.article.domain.member.entity.dto.MemberDto;
 import com.tak.article.domain.member.session.SessionConst;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -25,9 +24,7 @@ public class ArticleController {
 
 
     @GetMapping("/article")
-    public String article(Model model, HttpServletRequest request) {
-
-        ControllerMethod.checkNotExistPost(model, request);
+    public String article(Model model) {
 
         model.addAttribute("posts", articleService.getPostList());
 
@@ -41,20 +38,18 @@ public class ArticleController {
 
     @PostMapping("/post")
     public String post(@ModelAttribute("form") PostForm form,
-                       @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto) {
+                       @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto,
+                       RedirectAttributes redirectAttributes) {
 
         articleService.writePost(new Post(form, memberDto));
 
+        redirectAttributes.addFlashAttribute("writeSuccess", true);
         return "redirect:/article";
     }
 
     @GetMapping("/post/{id}")
     public String getPost(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes,
-                          @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto,
-                          HttpServletRequest request) {
-
-        ControllerMethod.checkModificationSuccess(model, request);
-
+                          @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto) {
         try {
             model.addAttribute("post", articleService.getPost(id));
             model.addAttribute("member", memberDto);
@@ -67,7 +62,8 @@ public class ArticleController {
 
     @GetMapping("/post/modify/{id}")
     public String getModifyPostForm(@PathVariable("id") Long id, Model model,
-                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto) {
+                                    @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto,
+                                    RedirectAttributes redirectAttributes) {
 
         Post post = articleService.getPost(id);
         if (post.getWriter().equals(memberDto.getNickname())) {
@@ -75,7 +71,8 @@ public class ArticleController {
             return "article/modify-post-form";
         }
 
-        return "/article/article-home";
+        redirectAttributes.addFlashAttribute("invalidAccess", true);
+        return "redirect:/article";
     }
 
     @PostMapping("/post/modify/{id}")
@@ -85,7 +82,6 @@ public class ArticleController {
         articleService.modifyPost(id, form);
 
         redirectAttributes.addFlashAttribute("modificationSuccess", true);
-
         return "redirect:/post/" + id;
     }
 }

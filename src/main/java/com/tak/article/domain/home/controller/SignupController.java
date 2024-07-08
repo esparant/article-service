@@ -1,5 +1,6 @@
 package com.tak.article.domain.home.controller;
 
+import com.tak.article.domain.func.ControllerMethod;
 import com.tak.article.domain.home.exception.NotUniqueException;
 import com.tak.article.domain.home.form.SignupForm;
 import com.tak.article.domain.home.response.SignupCheckResponse;

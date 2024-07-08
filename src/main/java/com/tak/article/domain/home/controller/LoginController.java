@@ -1,11 +1,11 @@
 package com.tak.article.domain.home.controller;
 
-import static com.tak.article.domain.home.controller.ControllerMethod.getErrorInfo;
+import static com.tak.article.domain.func.ControllerMethod.getErrorInfo;
 
-import com.tak.article.domain.member.entity.Member;
-import com.tak.article.domain.member.entity.dto.MemberDto;
 import com.tak.article.domain.home.exception.LoginException;
 import com.tak.article.domain.home.form.LoginForm;
+import com.tak.article.domain.member.entity.Member;
+import com.tak.article.domain.member.entity.dto.MemberDto;
 import com.tak.article.domain.member.service.MemberService;
 import com.tak.article.domain.member.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
@@ -42,7 +42,7 @@ public class LoginController {
 
         if (bindingResult.hasErrors()) {
             getErrorInfo(bindingResult);
-            return "redirect:/login?redirectURL=" + redirectUrl;
+            return "/login/login-home";
         }
 
         try {
@@ -54,7 +54,7 @@ public class LoginController {
         } catch (LoginException e) {
             bindingResult.reject("loginFail", "아이디가 존재하지 않거나 비밀번호가 일치하지 않습니다.");
             getErrorInfo(bindingResult);
-            return "redirect:/login?redirectURL=" + redirectUrl;
+            return "/login/login-home";
         }
     }
 

@@ -27,7 +27,7 @@
             <textarea class="form-control" id="content" name="content" rows="10" th:field="*{content}" required></textarea>
         </div>
         <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-primary">수정</button>
+            <button type="submit" class="btn btn-primary" onclick="return confirm('게시글을 수정하시겠습니까?')">수정</button>
             <a href="/article" class="btn btn-secondary" style="margin-left: 10px" onclick="return confirm('수정을 취소하시겠습니까?')">취소</a>
         </div>
     </form>

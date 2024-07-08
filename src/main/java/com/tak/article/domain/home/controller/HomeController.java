@@ -1,6 +1,5 @@
 package com.tak.article.domain.home.controller;
 
-import static com.tak.article.domain.home.controller.ControllerMethod.checkSignupSuccess;
 
 import com.tak.article.domain.home.form.LoginForm;
 import com.tak.article.domain.member.entity.dto.MemberDto;
@@ -22,10 +21,7 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(@SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto,
-                       @ModelAttribute("login") LoginForm form, Model model,
-                       HttpServletRequest request) {
-
-        checkSignupSuccess(model, request);
+                       @ModelAttribute("login") LoginForm form, Model model) {
 
         if (memberDto == null) {
             return "home";
