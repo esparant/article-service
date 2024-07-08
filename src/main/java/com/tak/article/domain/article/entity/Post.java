@@ -43,6 +43,11 @@ public class Post {
     private Long views;
 
     public void incrementViews() {
-        views++;
+        views ++;
+    }
+
+    public void modifyPost(PostForm form) {
+        title = form.getTitle();
+        content = form.getContent();
     }
 }

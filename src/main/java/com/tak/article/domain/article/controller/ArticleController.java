@@ -50,7 +50,10 @@ public class ArticleController {
 
     @GetMapping("/post/{id}")
     public String getPost(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes,
-                          @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto) {
+                          @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto,
+                          HttpServletRequest request) {
+
+        ControllerMethod.checkModificationSuccess(model, request);
 
         try {
             model.addAttribute("post", articleService.getPost(id));
@@ -62,9 +65,27 @@ public class ArticleController {
         }
     }
 
-    @GetMapping("/modify-post/{id}")
-    public String modifyPost(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("post", articleService.getPost(id));
-        return "article/modify-post-form";
+    @GetMapping("/post/modify/{id}")
+    public String getModifyPostForm(@PathVariable("id") Long id, Model model,
+                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto) {
+
+        Post post = articleService.getPost(id);
+        if (post.getWriter().equals(memberDto.getNickname())) {
+            model.addAttribute("post", new PostForm(post));
+            return "article/modify-post-form";
+        }
+
+        return "/article/article-home";
+    }
+
+    @PostMapping("/post/modify/{id}")
+    public String modifyPost(@PathVariable("id") Long id, @ModelAttribute("form") PostForm form,
+                             RedirectAttributes redirectAttributes) {
+
+        articleService.modifyPost(id, form);
+
+        redirectAttributes.addFlashAttribute("modificationSuccess", true);
+
+        return "redirect:/post/" + id;
     }
 }
