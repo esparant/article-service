@@ -1,7 +1,6 @@
 package com.tak.article.domain.article.controller;
 
 import com.tak.article.domain.article.entity.Post;
-import com.tak.article.domain.article.exception.NotExistPostException;
 import com.tak.article.domain.article.form.PostForm;
 import com.tak.article.domain.article.service.ArticleService;
 import com.tak.article.domain.member.entity.dto.MemberDto;
@@ -51,14 +50,9 @@ public class ArticleController {
     @GetMapping("/post/{id}")
     public String getPost(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes,
                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto) {
-        try {
-            model.addAttribute("post", articleService.getPost(id));
-            model.addAttribute("member", memberDto);
-            return "article/view";
-        } catch (NotExistPostException e) {
-            redirectAttributes.addFlashAttribute("notExistPost", true);
-            return "redirect:/article";
-        }
+        model.addAttribute("post", articleService.getPost(id));
+        model.addAttribute("member", memberDto);
+        return "article/view";
     }
 
     @GetMapping("/post/modify/{id}")
@@ -67,7 +61,7 @@ public class ArticleController {
                                     RedirectAttributes redirectAttributes) {
 
         Post post = articleService.getPost(id);
-        if (post.getWriter().equals(memberDto.getNickname())) {
+        if (isSameUser(memberDto, post)) {
             model.addAttribute("post", new PostForm(post));
             return "article/modify-post-form";
         }
@@ -82,7 +76,7 @@ public class ArticleController {
                              RedirectAttributes redirectAttributes) {
 
         Post post = articleService.getPost(id);
-        if (post.getWriter().equals(memberDto.getNickname())) {
+        if (isSameUser(memberDto, post)) {
             articleService.modifyPost(id, form);
             redirectAttributes.addFlashAttribute("modificationSuccess", true);
             return "redirect:/post/" + id;
@@ -98,7 +92,7 @@ public class ArticleController {
 
         Post post = articleService.getPost(id);
 
-        if (post.getWriter().equals(memberDto.getNickname())) {
+        if (isSameUser(memberDto, post)) {
             redirectAttributes.addFlashAttribute("deleteSuccess", true);
             articleService.deletePost(id);
         } else {
@@ -106,5 +100,9 @@ public class ArticleController {
         }
 
         return "redirect:/article";
+    }
+
+    private static boolean isSameUser(MemberDto memberDto, Post post) {
+        return post.getWriter().equals(memberDto.getNickname());
     }
 }
