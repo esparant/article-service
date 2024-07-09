@@ -1,5 +1,6 @@
 package com.tak.article;
 
+import jakarta.persistence.EntityManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
@@ -16,4 +17,10 @@ public class ArticleApplication {
 	public HiddenHttpMethodFilter hiddenHttpMethodFilter() {
 		return new HiddenHttpMethodFilter();
 	}
+
+	@Bean
+	public EntityManager entityManager(EntityManager em) {
+		return em;
+	}
+
 }

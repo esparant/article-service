@@ -6,6 +6,7 @@ import com.tak.article.domain.article.service.ArticleService;
 import com.tak.article.domain.member.entity.dto.MemberDto;
 import com.tak.article.domain.session.SessionConst;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,15 +19,16 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class ArticleController {
 
     private final ArticleService articleService;
 
 
     @GetMapping("/article")
-    public String article(Model model) {
+    public String article(Model model, @ModelAttribute("search") String searchValue) {
 
-        model.addAttribute("posts", articleService.getPostList());
+        model.addAttribute("posts", articleService.searchPost(searchValue));
 
         return "article/article-home";
     }

@@ -46,7 +46,7 @@ public class SignupController {
         try {
             memberService.save(new Member(form));
             redirectAttributes.addFlashAttribute("success", true);
-            return "redirect:/";
+            return "redirect:/login";
 
         } catch (NotUniqueException e) {
             bindingResult.reject("signup", "올바른 접근으로 가입해주세요.");

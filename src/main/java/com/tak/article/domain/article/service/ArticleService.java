@@ -3,6 +3,7 @@ package com.tak.article.domain.article.service;
 import com.tak.article.domain.article.entity.Post;
 import com.tak.article.domain.article.exception.NotExistPostException;
 import com.tak.article.domain.article.form.PostForm;
+import com.tak.article.domain.article.repositoriy.ArticleQueryDslRepository;
 import com.tak.article.domain.article.repositoriy.ArticleRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
+    private final ArticleQueryDslRepository articleQueryDslRepository;
 
     @Transactional
     public Post getPost(Long id) {
@@ -48,5 +50,9 @@ public class ArticleService {
     public void deletePost(Long id) {
         Post original = articleRepository.findById(id).orElseThrow(NotExistPostException::new);
         articleRepository.delete(original);
+    }
+
+    public List<Post> searchPost(String title) {
+        return articleQueryDslRepository.SearchPost(title);
     }
 }
