@@ -16,6 +16,9 @@
     <script th:if="${writeSuccess}">
         alert('게시글이 작성되었습니다.')
     </script>
+    <script th:if="${deleteSuccess}">
+        alert('게시글이 삭제되었습니다.')
+    </script>
 </head>
 <body>
 <div th:replace="~{fragments/navbar :: nav}"></div>

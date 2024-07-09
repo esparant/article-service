@@ -7,7 +7,7 @@ import com.tak.article.domain.home.form.LoginForm;
 import com.tak.article.domain.member.entity.Member;
 import com.tak.article.domain.member.entity.dto.MemberDto;
 import com.tak.article.domain.member.service.MemberService;
-import com.tak.article.domain.member.session.SessionConst;
+import com.tak.article.domain.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import java.util.Optional;

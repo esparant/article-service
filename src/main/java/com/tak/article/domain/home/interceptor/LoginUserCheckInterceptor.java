@@ -1,6 +1,6 @@
 package com.tak.article.domain.home.interceptor;
 
-import com.tak.article.domain.member.session.SessionConst;
+import com.tak.article.domain.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;

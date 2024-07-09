@@ -10,10 +10,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     private static final String[] GUEST_PATTERNS = {
-            "/", "/error", "/login", "/signup", "/sign-up/check"};
+            "/", "/error", "/login", "/signup", "/sign-up/check", "/**.ico"};
     private static final String[] MEMBER_PATTERNS = {
             "/", "/error", "/logout", "/article", "/post",
-            "/post/**", "/post/modify/**"};
+            "/post/**", "/**.ico"};
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

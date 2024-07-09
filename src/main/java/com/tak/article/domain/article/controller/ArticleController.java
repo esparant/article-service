@@ -5,10 +5,11 @@ import com.tak.article.domain.article.exception.NotExistPostException;
 import com.tak.article.domain.article.form.PostForm;
 import com.tak.article.domain.article.service.ArticleService;
 import com.tak.article.domain.member.entity.dto.MemberDto;
-import com.tak.article.domain.member.session.SessionConst;
+import com.tak.article.domain.session.SessionConst;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -83,5 +84,21 @@ public class ArticleController {
 
         redirectAttributes.addFlashAttribute("modificationSuccess", true);
         return "redirect:/post/" + id;
+    }
+
+    @DeleteMapping("/post/delete/{id}")
+    public String deletePost(@PathVariable("id") Long id, RedirectAttributes redirectAttributes,
+                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto) {
+
+        Post post = articleService.findPost(id).orElseThrow(NotExistPostException::new);
+
+        if (post.getWriter().equals(memberDto.getNickname())) {
+            redirectAttributes.addFlashAttribute("deleteSuccess", true);
+            articleService.deletePost(id);
+        } else {
+            redirectAttributes.addFlashAttribute("invalidAccess", true);
+        }
+
+        return "redirect:/article";
     }
 }

@@ -3,7 +3,7 @@ package com.tak.article.domain.home.controller;
 
 import com.tak.article.domain.home.form.LoginForm;
 import com.tak.article.domain.member.entity.dto.MemberDto;
-import com.tak.article.domain.member.session.SessionConst;
+import com.tak.article.domain.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

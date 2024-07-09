@@ -36,7 +36,12 @@
         <a href="/article" class="btn btn-secondary me-2">목록으로</a>
         <div th:if="${member.nickname == post.writer}">
             <a th:href="@{/post/modify/{id}(id=*{id})}" class="btn btn-primary me-2">수정하기</a>
-            <a href="/article/delete/*{id}" class="btn btn-danger" onclick="return confirm('정말 삭제하시겠습니까?')">삭제하기</a>
+            <!--            <a th:href="@{/post/delete/{id}(id=*{id})}" class="btn btn-danger" th:method="delete" onclick="return confirm('정말 삭제하시겠습니까?')">삭제하기</a>-->
+            <form th:action="@{/post/delete/{id}(id=*{id})}" method="post" style="display:inline;"
+                  onsubmit="return confirm('정말 삭제하시겠습니까?');">
+                <input type="hidden" name="_method" value="DELETE"/>
+                <button type="submit" class="btn btn-danger">삭제하기</button>
+            </form>
         </div>
     </div>
 </div>
