@@ -5,7 +5,6 @@ import com.tak.article.domain.article.exception.NotExistPostException;
 import com.tak.article.domain.article.form.PostForm;
 import com.tak.article.domain.article.repositoriy.ArticleRepository;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Sort;
@@ -49,9 +48,5 @@ public class ArticleService {
     public void deletePost(Long id) {
         Post original = articleRepository.findById(id).orElseThrow(NotExistPostException::new);
         articleRepository.delete(original);
-    }
-
-    public Optional<Post> findPost(Long id) {
-        return articleRepository.findById(id);
     }
 }

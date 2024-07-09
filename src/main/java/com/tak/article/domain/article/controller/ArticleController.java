@@ -78,19 +78,25 @@ public class ArticleController {
 
     @PostMapping("/post/modify/{id}")
     public String modifyPost(@PathVariable("id") Long id, @ModelAttribute("form") PostForm form,
+                             @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto,
                              RedirectAttributes redirectAttributes) {
 
-        articleService.modifyPost(id, form);
+        Post post = articleService.getPost(id);
+        if (post.getWriter().equals(memberDto.getNickname())) {
+            articleService.modifyPost(id, form);
+            redirectAttributes.addFlashAttribute("modificationSuccess", true);
+            return "redirect:/post/" + id;
+        }
 
-        redirectAttributes.addFlashAttribute("modificationSuccess", true);
-        return "redirect:/post/" + id;
+        redirectAttributes.addFlashAttribute("invalidAccess", true);
+        return "redirect:/article";
     }
 
     @DeleteMapping("/post/delete/{id}")
     public String deletePost(@PathVariable("id") Long id, RedirectAttributes redirectAttributes,
                              @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto) {
 
-        Post post = articleService.findPost(id).orElseThrow(NotExistPostException::new);
+        Post post = articleService.getPost(id);
 
         if (post.getWriter().equals(memberDto.getNickname())) {
             redirectAttributes.addFlashAttribute("deleteSuccess", true);
