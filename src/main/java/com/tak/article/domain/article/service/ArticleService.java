@@ -3,11 +3,12 @@ package com.tak.article.domain.article.service;
 import com.tak.article.domain.article.entity.Post;
 import com.tak.article.domain.article.exception.NotExistPostException;
 import com.tak.article.domain.article.form.PostForm;
-import com.tak.article.domain.article.repositoriy.ArticleQueryDslRepository;
 import com.tak.article.domain.article.repositoriy.ArticleRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -19,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArticleService {
 
     private final ArticleRepository articleRepository;
-    private final ArticleQueryDslRepository articleQueryDslRepository;
 
     @Transactional
     public Post getPost(Long id) {
@@ -52,7 +52,7 @@ public class ArticleService {
         articleRepository.delete(original);
     }
 
-    public List<Post> searchPost(String title) {
-        return articleQueryDslRepository.SearchPost(title);
+    public Page<Post> searchPost(String title, PageRequest pageRequest) {
+        return articleRepository.searchPage(title, pageRequest);
     }
 }

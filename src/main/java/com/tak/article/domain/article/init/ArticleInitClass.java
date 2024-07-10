@@ -17,10 +17,9 @@ public class ArticleInitClass {
 
     @EventListener(ApplicationReadyEvent.class)
     private void init() {
-        articleRepository.save(new Post("test1", "test1", "test"));
-        articleRepository.save(new Post("test1", "test1", "test"));
-        articleRepository.save(new Post("test1", "test1", "test"));
-        articleRepository.save(new Post("test1", "test1", "test"));
+        for (int i = 0; i < 500; i++) {
+            articleRepository.save(new Post("test" + i, "test", "test"));
+        }
 
     }
 }

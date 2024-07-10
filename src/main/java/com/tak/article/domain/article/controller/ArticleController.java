@@ -7,6 +7,7 @@ import com.tak.article.domain.member.entity.dto.MemberDto;
 import com.tak.article.domain.session.SessionConst;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -26,10 +28,13 @@ public class ArticleController {
 
 
     @GetMapping("/article")
-    public String article(Model model, @ModelAttribute("search") String searchValue) {
+    public String article(Model model, @ModelAttribute("search") String searchValue,
+                          @RequestParam(value = "pageIdx", defaultValue = "0") int pageIdx) {
 
-        model.addAttribute("posts", articleService.searchPost(searchValue));
 
+        log.info("pageIdx = {}", pageIdx);
+        model.addAttribute("posts", articleService.searchPost(searchValue, PageRequest.of(pageIdx, 10)));
+        model.addAttribute("currentGroup", pageIdx / 10);
         return "article/article-home";
     }
 
