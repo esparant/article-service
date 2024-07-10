@@ -1,11 +1,15 @@
 package com.tak.article.domain.article.entity;
 
 import com.tak.article.domain.article.form.PostForm;
+import com.tak.article.domain.comment.entity.Comment;
 import com.tak.article.domain.member.entity.dto.MemberDto;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
+import jakarta.persistence.OneToMany;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -42,6 +46,9 @@ public class Post {
 
     private Long views;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments;
+
     public void incrementViews() {
         views ++;
     }
@@ -49,5 +56,10 @@ public class Post {
     public void modifyPost(PostForm form) {
         title = form.getTitle();
         content = form.getContent();
+    }
+
+    public void addComment(Comment comment) {
+        comments.add(comment);
+        comment.setPost(this);
     }
 }

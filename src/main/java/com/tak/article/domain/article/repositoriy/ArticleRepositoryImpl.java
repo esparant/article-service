@@ -2,6 +2,7 @@ package com.tak.article.domain.article.repositoriy;
 
 import static com.tak.article.domain.article.entity.QPost.post;
 
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.jpa.impl.JPAQuery;
@@ -34,9 +35,7 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
         List<Post> content = queryFactory.selectFrom(post)
                 .where(containTitle(title))
                 .orderBy(
-                        new CaseBuilder()
-                                .when(post.title.eq(title)).then(0)
-                                .otherwise(1).asc(),
+                        isExact(title),
                         post.id.desc()
                 )
                 .offset(pageable.getOffset())
@@ -48,6 +47,12 @@ public class ArticleRepositoryImpl implements ArticleRepositoryCustom {
                 .where(containTitle(title));
 
         return PageableExecutionUtils.getPage(content, pageable, count::fetchOne);
+    }
+
+    private static OrderSpecifier<Integer> isExact(String title) {
+        return new CaseBuilder()
+                .when(post.title.eq(title)).then(0)
+                .otherwise(1).asc();
     }
 
     private static BooleanExpression containTitle(String title) {

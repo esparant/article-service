@@ -3,6 +3,7 @@ package com.tak.article.domain.article.controller;
 import com.tak.article.domain.article.entity.Post;
 import com.tak.article.domain.article.form.PostForm;
 import com.tak.article.domain.article.service.ArticleService;
+import com.tak.article.domain.comment.form.CommentForm;
 import com.tak.article.domain.member.entity.dto.MemberDto;
 import com.tak.article.domain.session.SessionConst;
 import lombok.RequiredArgsConstructor;
@@ -31,7 +32,6 @@ public class ArticleController {
     public String article(Model model, @ModelAttribute("search") String searchValue,
                           @RequestParam(value = "pageIdx", defaultValue = "0") int pageIdx) {
 
-
         log.info("pageIdx = {}", pageIdx);
         model.addAttribute("posts", articleService.searchPost(searchValue, PageRequest.of(pageIdx, 10)));
         model.addAttribute("currentGroup", pageIdx / 10);
@@ -55,10 +55,11 @@ public class ArticleController {
     }
 
     @GetMapping("/post/{id}")
-    public String getPost(@PathVariable("id") Long id, Model model, RedirectAttributes redirectAttributes,
+    public String getPost(@PathVariable("id") Long id, Model model,
                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto) {
         model.addAttribute("post", articleService.getPost(id));
         model.addAttribute("member", memberDto);
+        model.addAttribute("comment", new CommentForm(memberDto.getNickname()));
         return "article/view";
     }
 

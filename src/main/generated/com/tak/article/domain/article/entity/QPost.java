@@ -7,6 +7,7 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
+import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -18,6 +19,8 @@ public class QPost extends EntityPathBase<Post> {
     private static final long serialVersionUID = 617382942L;
 
     public static final QPost post = new QPost("post");
+
+    public final ListPath<com.tak.article.domain.comment.entity.Comment, com.tak.article.domain.comment.entity.QComment> comments = this.<com.tak.article.domain.comment.entity.Comment, com.tak.article.domain.comment.entity.QComment>createList("comments", com.tak.article.domain.comment.entity.Comment.class, com.tak.article.domain.comment.entity.QComment.class, PathInits.DIRECT2);
 
     public final StringPath content = createString("content");
 
