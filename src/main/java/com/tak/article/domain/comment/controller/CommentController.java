@@ -26,20 +26,22 @@ public class CommentController {
     public String writeComment(@Valid @ModelAttribute("comment") CommentForm form,
                                BindingResult bindingResult,
                                RedirectAttributes redirectAttributes,
-                               @PathVariable("id") Long id) {
+                               @PathVariable("id") Long postId) {
 
         if (bindingResult.hasErrors()) {
             ControllerMethod.getErrorInfo(bindingResult);
-            return "redirect:/post/" + id;
+            return "redirect:/post/" + postId;
         }
 
         log.info("comment form: {}", form);
 
-        commentService.saveComment(id, new Comment(form));
+        commentService.saveComment(postId, new Comment(form));
 
         redirectAttributes.addFlashAttribute("addCommentSuccess", true);
 
-        return "redirect:/post/" + id;
+        return "redirect:/post/" + postId;
     }
+
+
 
 }

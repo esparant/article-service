@@ -46,7 +46,7 @@ public class Post {
 
     private Long views;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Comment> comments;
 
     public void incrementViews() {
@@ -56,10 +56,5 @@ public class Post {
     public void modifyPost(PostForm form) {
         title = form.getTitle();
         content = form.getContent();
-    }
-
-    public void addComment(Comment comment) {
-        comments.add(comment);
-        comment.setPost(this);
     }
 }

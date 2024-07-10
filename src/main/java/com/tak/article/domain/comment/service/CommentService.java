@@ -19,7 +19,7 @@ public class CommentService {
     @Transactional
     public void saveComment(Long postId, Comment comment) {
         Post post = articleService.getPost(postId);
-        post.addComment(comment);
+        comment.addComment(post);
         commentRepository.save(comment);
     }
 }

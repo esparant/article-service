@@ -11,10 +11,13 @@ import lombok.NoArgsConstructor;
 public class PostForm {
 
     public PostForm(Post post) {
+        id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
 
     }
+
+    private Long id;
 
     private String title;
     private String content;

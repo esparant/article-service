@@ -11,7 +11,6 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Getter
@@ -29,9 +28,12 @@ public class Comment {
     private String content;
     private String writer;
 
-    @Setter
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
     private Post post;
 
+    public void addComment(Post post) {
+        this.post = post;
+        post.getComments().add(this);
+    }
 }
