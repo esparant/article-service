@@ -48,7 +48,7 @@ public class Post {
     private Long views;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Comment> comments = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
 
     public void incrementViews() {
         views++;

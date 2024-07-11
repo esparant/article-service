@@ -21,9 +21,13 @@ class CommentServiceTest {
     @Autowired
     ArticleService articleService;
 
+    private Long postId;
+
     @BeforeEach
     void setUp() {
-        articleService.writePost(new Post("hello1", "hello1", "tester"));
+        Post post = new Post("hello1", "hello1", "tester");
+        articleService.savePost(post);
+        postId = post.getId();
     }
 
 
@@ -31,9 +35,9 @@ class CommentServiceTest {
     @DisplayName("댓글 작성")
     void writeComment() {
         Comment comment = new Comment(new CommentForm("hello", "123"));
-        commentService.saveComment(1L, comment);
+        commentService.saveComment(postId, comment);
 
-        Post post = articleService.getPost(1L);
+        Post post = articleService.getPost(postId);
 
         Assertions.assertThat(post.getComments().size()).isEqualTo(1);
         Assertions.assertThat(post.getComments().getFirst()).isEqualTo(comment);
@@ -43,10 +47,10 @@ class CommentServiceTest {
     @DisplayName("댓글 수정")
     void modifyComment() {
         Comment comment = new Comment(new CommentForm("hello", "123"));
-        commentService.saveComment(1L, comment);
+        commentService.saveComment(postId, comment);
 
         commentService.modifyComment(comment.getId(), new CommentForm("hello", "456"));
-        Post post = articleService.getPost(1L);
+        Post post = articleService.getPost(postId);
 
         Assertions.assertThat(post.getComments().getFirst().getContent()).isEqualTo("456");
     }
@@ -55,9 +59,13 @@ class CommentServiceTest {
     @DisplayName("댓글 삭제")
     void deleteComment() {
         Comment comment = new Comment(new CommentForm("hello", "123"));
-        commentService.saveComment(1L, comment);
-        commentService.deleteComment(1L, comment.getId());
-        Post post = articleService.getPost(1L);
+        commentService.saveComment(postId, comment);
+
+        commentService.findComment(comment.getId()); // 작동확인
+
+        commentService.deleteComment(postId, comment.getId());
+        Post post = articleService.getPost(postId);
+
 
         Assertions.assertThatThrownBy(
                 () -> commentService.findComment(comment.getId())

@@ -34,7 +34,7 @@ public class ArticleService {
     }
 
     @Transactional
-    public void writePost(Post post) {
+    public void savePost(Post post) {
         articleRepository.save(post);
     }
 

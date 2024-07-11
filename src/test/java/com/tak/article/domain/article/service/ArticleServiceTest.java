@@ -22,10 +22,10 @@ class ArticleServiceTest {
 
     @Test
     @DisplayName("게시글 작성")
-    void writePost() {
+    void savePost() {
 
         Post post = new Post("hello", "hello", "me");
-        articleService.writePost(post);
+        articleService.savePost(post);
         Post result = articleService.getPost(post.getId());
         assertThat(result).isEqualTo(post);
 
@@ -37,8 +37,9 @@ class ArticleServiceTest {
     @DisplayName("게시글 수정")
     void modifyPost() {
         Post post = new Post("hello", "hello", "me");
-        articleService.writePost(post);
-        post.modifyPost(new PostForm(post));
+        articleService.savePost(post);
+
+        post.modifyPost(new PostForm(new Post("nono", "oh my god", "me")));
 
         Post result = articleService.getPost(post.getId());
 
@@ -50,7 +51,7 @@ class ArticleServiceTest {
     @DisplayName("게시글 삭제")
     void deletePost() {
         Post post = new Post("hello", "hello", "me");
-        articleService.writePost(post);
+        articleService.savePost(post);
         articleService.deletePost(post.getId());
         assertThat(articleService.getPostList()).isEmpty();
     }
@@ -58,9 +59,9 @@ class ArticleServiceTest {
     @Test
     @DisplayName("검색 시스템")
     void searchPost() {
-        articleService.writePost(new Post("hello", "hello", "me"));
-        articleService.writePost(new Post("hello2", "hello2", "me2"));
-        articleService.writePost(new Post("hello3", "hello3", "me3"));
+        articleService.savePost(new Post("hello", "hello", "me"));
+        articleService.savePost(new Post("hello2", "hello2", "me2"));
+        articleService.savePost(new Post("hello3", "hello3", "me3"));
 
         Page<Post> resultA = articleService.searchPost("hello2", PageRequest.of(0, 10));
         assertThat(resultA.getTotalElements()).isEqualTo(1);

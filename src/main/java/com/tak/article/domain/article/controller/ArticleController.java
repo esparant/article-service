@@ -48,7 +48,7 @@ public class ArticleController {
                        @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto,
                        RedirectAttributes redirectAttributes) {
 
-        articleService.writePost(new Post(form, memberDto));
+        articleService.savePost(new Post(form, memberDto));
 
         redirectAttributes.addFlashAttribute("writeSuccess", true);
         return "redirect:/article";
