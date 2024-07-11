@@ -59,33 +59,37 @@
     <!-- 페이징 네비게이션 -->
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${!posts.hasPrevious()} ? 'disabled'">
-                <a class="page-link" th:href="@{/article(search=${search}, pageIdx=${posts.number - 1})}" aria-label="Previous" th:disabled="${!posts.hasPrevious()}">
+            <!-- 이전 그룹으로 이동 -->
+            <li class="page-item" th:classappend="${currentGroup > 0} ? '' : 'disabled'">
+                <a class="page-link" th:href="@{/article(search=${search}, pageIdx=${currentGroup * 10 - 10})}"
+                   aria-label="Previous Group">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-
-            <!-- 이전 그룹으로 이동 -->
-            <li class="page-item" th:classappend="${currentGroup > 0} ? '' : 'disabled'">
-                <a class="page-link" th:href="@{/article(search=${search}, pageIdx=${currentGroup * 10 - 10})}" aria-label="Previous Group">
+            <li class="page-item" th:classappend="${!posts.hasPrevious()} ? 'disabled'">
+                <a class="page-link" th:href="@{/article(search=${search}, pageIdx=${posts.number - 1})}"
+                   aria-label="Previous" th:disabled="${!posts.hasPrevious()}">
                     <span aria-hidden="true">&lsaquo;</span>
                 </a>
             </li>
-
             <!-- 페이지 번호 -->
-            <li class="page-item" th:each="pageNum : ${#numbers.sequence(currentGroup * 10 + 1, T(java.lang.Math).min((currentGroup + 1) * 10, posts.totalPages))}" th:classappend="${pageNum == posts.number + 1} ? 'active'">
-                <a class="page-link" th:href="@{/article(search=${search}, pageIdx=${pageNum - 1})}" th:text="${pageNum}">1</a>
-            </li>
-
-            <!-- 다음 그룹으로 이동 -->
-            <li class="page-item" th:classappend="${(currentGroup + 1) * 10 < posts.totalPages} ? '' : 'disabled'">
-                <a class="page-link" th:href="@{/article(search=${search}, pageIdx=${(currentGroup + 1) * 10})}" aria-label="Next Group">
-                    <span aria-hidden="true">&rsaquo;</span>
-                </a>
+            <li class="page-item"
+                th:each="pageNum : ${#numbers.sequence(currentGroup * 10 + 1, T(java.lang.Math).min((currentGroup + 1) * 10, posts.totalPages))}"
+                th:classappend="${pageNum == posts.number + 1} ? 'active'">
+                <a class="page-link" th:href="@{/article(search=${search}, pageIdx=${pageNum - 1})}"
+                   th:text="${pageNum}">1</a>
             </li>
 
             <li class="page-item" th:classappend="${!posts.hasNext()} ? 'disabled'">
-                <a class="page-link" th:href="@{/article(search=${search}, pageIdx=${posts.number + 1})}" aria-label="Next" th:disabled="${!posts.hasNext()}">
+                <a class="page-link" th:href="@{/article(search=${search}, pageIdx=${posts.number + 1})}"
+                   aria-label="Next" th:disabled="${!posts.hasNext()}">
+                    <span aria-hidden="true">&rsaquo;</span>
+                </a>
+            </li>
+            <!-- 다음 그룹으로 이동 -->
+            <li class="page-item" th:classappend="${(currentGroup + 1) * 10 < posts.totalPages} ? '' : 'disabled'">
+                <a class="page-link" th:href="@{/article(search=${search}, pageIdx=${(currentGroup + 1) * 10})}"
+                   aria-label="Next Group">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
