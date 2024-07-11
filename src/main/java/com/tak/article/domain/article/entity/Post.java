@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,7 +23,7 @@ public class Post {
     public Post(PostForm form, MemberDto dto) {
         this.title = form.getTitle();
         this.content = form.getContent();
-        writer =  dto.getNickname();
+        writer = dto.getNickname();
         views = 0L;
     }
 
@@ -46,15 +47,19 @@ public class Post {
 
     private Long views;
 
-    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL,orphanRemoval = true)
-    private List<Comment> comments;
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Comment> comments = new ArrayList<>();
 
     public void incrementViews() {
-        views ++;
+        views++;
     }
 
     public void modifyPost(PostForm form) {
         title = form.getTitle();
         content = form.getContent();
+    }
+
+    public void removeComment(Comment comment) {
+        comments.remove(comment);
     }
 }

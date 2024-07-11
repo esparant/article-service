@@ -46,8 +46,7 @@ public class CommentController {
     }
 
     @PostMapping("/post/{postId}/modify-comment/{commId}")
-    public ResponseEntity<Comment> updateComment(@PathVariable("postId") Long postId,
-                                                 @PathVariable("commId") Long commId,
+    public ResponseEntity<Comment> updateComment(@PathVariable("commId") Long commId,
                                                  @ModelAttribute CommentForm form) {
 
         log.info("comment form: {}", form);
@@ -66,7 +65,7 @@ public class CommentController {
                                 RedirectAttributes redirectAttributes) {
 
         try {
-            commentService.deleteComment(commId);
+            commentService.deleteComment(postId, commId);
             redirectAttributes.addFlashAttribute("deleteCommentSuccess", true);
         } catch (NotExistCommentException e) {
             redirectAttributes.addFlashAttribute("notExistComment", true);

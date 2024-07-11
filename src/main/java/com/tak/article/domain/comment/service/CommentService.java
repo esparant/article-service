@@ -1,7 +1,8 @@
 package com.tak.article.domain.comment.service;
 
 import com.tak.article.domain.article.entity.Post;
-import com.tak.article.domain.article.service.ArticleService;
+import com.tak.article.domain.article.exception.NotExistPostException;
+import com.tak.article.domain.article.repositoriy.ArticleRepository;
 import com.tak.article.domain.comment.entity.Comment;
 import com.tak.article.domain.comment.exception.NotExistCommentException;
 import com.tak.article.domain.comment.form.CommentForm;
@@ -16,10 +17,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
 
     private final CommentRepository commentRepository;
-    private final ArticleService articleService;
+    private final ArticleRepository articleRepository;
 
     public void saveComment(Long postId, Comment comment) {
-        Post post = articleService.getPost(postId);
+        Post post = articleRepository.findById(postId).orElseThrow(NotExistPostException::new);
         comment.addComment(post);
         commentRepository.save(comment);
     }
@@ -30,8 +31,16 @@ public class CommentService {
         comment.modifyComment(form);
     }
 
-    public void deleteComment(Long commentId) {
+    public void deleteComment(Long postId, Long commentId) {
+        Post post = articleRepository.findById(postId).orElseThrow(NotExistPostException::new);
         Comment comment = commentRepository.findById(commentId).orElseThrow(NotExistCommentException::new);
+
+        post.removeComment(comment);
         commentRepository.delete(comment);
+    }
+
+    @Transactional(readOnly = true)
+    public Comment findComment(Long commentId) {
+        return commentRepository.findById(commentId).orElseThrow(NotExistCommentException::new);
     }
 }
