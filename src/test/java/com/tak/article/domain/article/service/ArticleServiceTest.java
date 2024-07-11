@@ -8,6 +8,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
@@ -36,7 +38,7 @@ class ArticleServiceTest {
     void modifyPost() {
         Post post = new Post("hello", "hello", "me");
         articleService.writePost(post);
-        post.modifyPost(new PostForm("nono", "oh my god"));
+        post.modifyPost(new PostForm(post));
 
         Post result = articleService.getPost(post.getId());
 
@@ -60,12 +62,12 @@ class ArticleServiceTest {
         articleService.writePost(new Post("hello2", "hello2", "me2"));
         articleService.writePost(new Post("hello3", "hello3", "me3"));
 
-        //TODO 테스트 재작성
-//        List<Post> resultA = articleService.("hello");
-//        assertThat(resultA).hasSize(3);
-//
-//        List<Post> resultB = articleService.searchPost("hello2");
-//        assertThat(resultB).hasSize(1);
+        Page<Post> resultA = articleService.searchPost("hello2", PageRequest.of(0, 10));
+        assertThat(resultA.getTotalElements()).isEqualTo(1);
+        assertThat(resultA.getTotalPages()).isEqualTo(1);
+
+        Page<Post> resultB = articleService.searchPost("hello", PageRequest.of(0, 10));
+        assertThat(resultB.getTotalElements()).isEqualTo(3);
 
     }
 }
