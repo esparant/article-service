@@ -25,6 +25,8 @@ public class Comment {
     @GeneratedValue
     @Id
     private Long id;
+
+
     private String content;
     private String writer;
 
@@ -35,5 +37,9 @@ public class Comment {
     public void addComment(Post post) {
         this.post = post;
         post.getComments().add(this);
+    }
+
+    public void modifyComment(CommentForm form) {
+        this.content = form.getContent();
     }
 }

@@ -15,4 +15,5 @@ public class ControllerAdvize {
 
         return new RedirectView("/article");
     }
+
 }

@@ -12,6 +12,12 @@
     <script th:if="${addCommentSuccess}">
         alert('댓글이 작성되었습니다.')
     </script>
+    <script th:if="${deleteCommentSuccess}">
+        alert('댓글이 삭제되었습니다.')
+    </script>
+    <script th:if="${notExistComment}">
+        alert('존재하지 않는 댓글 입니다.')
+    </script>
 </head>
 <body>
 <div th:replace="~{fragments/navbar :: nav}"></div>
@@ -59,7 +65,8 @@
                     <button type="button" class="btn btn-warning btn-sm"
                             th:onclick="'showEditForm(' + ${comment.id} + ')'">수정
                     </button>
-                    <form th:action="@{/comment/delete/{id}(id=${comment.id})}" method="post" style="display:inline;"
+                    <form th:action="@{/post/{postId}/delete-comment/{commId}(postId=${post.id}, commId=${comment.id})}"
+                          method="post" style="display:inline;"
                           onsubmit="return confirm('정말 삭제하시겠습니까?');">
                         <input type="hidden" name="_method" value="DELETE"/>
                         <button type="submit" class="btn btn-danger btn-sm">삭제</button>
@@ -68,9 +75,10 @@
                 <div th:id="'editForm-' + ${comment.id}" style="display:none;">
                     <textarea th:id="'editContent-' + ${comment.id}"
                               class="form-control mb-2">[[${comment.content}]]</textarea>
-                    <button type="button" class="btn btn-success btn-sm" th:onclick="'saveEdit(' + ${comment.id} + ')'">
-                        저장
+                    <button type="button" class="btn btn-success btn-sm"
+                            th:onclick="'saveEdit(' + ${post.id} + ', ' + ${comment.id} + ')'">저장
                     </button>
+
                     <button type="button" class="btn btn-secondary btn-sm"
                             th:onclick="'hideEditForm(' + ${comment.id} + ')'">취소
                     </button>
@@ -127,20 +135,24 @@
         }
     }
 
-    function saveEdit(commentId) {
+    function saveEdit(postId, commentId) {
         const content = document.getElementById('editContent-' + commentId).value;
         $.ajax({
-            url: '/comment/update/' + commentId,
+            url: '/post/' + postId + '/modify-comment/' + commentId,
             type: 'POST',
             data: {
                 content: content,
-                _method: 'PUT'
             },
-            success: function(response) {
-                document.getElementById('comment-' + commentId).innerText = content;
-                hideEditForm(commentId);
+            success: function (response, status, xhr) {
+                if (xhr.status === 204) {
+                    alert('존재하지 않는 댓글입니다.');
+                    location.reload();  // 페이지 새로고침
+                } else {
+                    document.getElementById('comment-' + commentId).innerText = content;
+                    hideEditForm(commentId);
+                }
             },
-            error: function(error) {
+            error: function (error) {
                 alert('수정에 실패했습니다.');
             }
         });
