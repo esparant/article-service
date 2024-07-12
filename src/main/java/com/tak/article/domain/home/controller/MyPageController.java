@@ -46,7 +46,7 @@ public class MyPageController {
 
         String newPassword = objectMapper.readTree(requestPassword).get("newPassword").asText();
 
-        memberService.changePassword(loginMember.getId(), loginMember, newPassword);
+        memberService.changePassword(loginMember, newPassword);
 
         return ResponseEntity.ok().build();
     }

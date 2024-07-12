@@ -52,8 +52,8 @@ public class MemberService {
     }
 
     @Transactional
-    public void changePassword(Long memberId, MemberDto loginMember, String updatePassword) {
-        Member member = memberRepository.findById(memberId).orElseThrow(NotExistMemberException::new);
+    public void changePassword(MemberDto loginMember, String updatePassword) {
+        Member member = memberRepository.findById(loginMember.getId()).orElseThrow(NotExistMemberException::new);
         if (!member.getUsername().equals(loginMember.getUsername())) {
             throw new NotEqualMemberException();
         }

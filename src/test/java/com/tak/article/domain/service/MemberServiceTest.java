@@ -9,6 +9,7 @@ import com.tak.article.domain.home.exception.NotUniqueException;
 import com.tak.article.domain.home.form.LoginForm;
 import com.tak.article.domain.home.form.SignupForm;
 import com.tak.article.domain.member.entity.Member;
+import com.tak.article.domain.member.entity.dto.MemberDto;
 import com.tak.article.domain.member.service.MemberService;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -77,5 +78,15 @@ class MemberServiceTest {
         assertThatThrownBy(() -> memberService.login(new LoginForm("user2", "123")))
                 .isInstanceOf(LoginException.class);
 
+    }
+
+    @Test
+    @DisplayName("비밀번호 변경")
+    void changePassword() {
+        Member member = new Member(new SignupForm("user1", "123", "hello"));
+        memberService.save(member);
+        memberService.changePassword(new MemberDto(member.getId(), member.getUsername(), member.getNickname()), "123456");
+
+        assertThat(memberService.findById(member.getId()).getPassword()).isEqualTo("123456");
     }
 }
