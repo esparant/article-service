@@ -4,6 +4,8 @@ import com.tak.article.domain.home.exception.LoginException;
 import com.tak.article.domain.home.exception.NotUniqueException;
 import com.tak.article.domain.home.form.LoginForm;
 import com.tak.article.domain.member.entity.Member;
+import com.tak.article.domain.member.entity.dto.MemberDto;
+import com.tak.article.domain.member.exception.NotEqualMemberException;
 import com.tak.article.domain.member.exception.NotExistMemberException;
 import com.tak.article.domain.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -47,6 +49,16 @@ public class MemberService {
         }
 
         return member;
+    }
+
+    @Transactional
+    public void changePassword(Long memberId, MemberDto loginMember, String updatePassword) {
+        Member member = memberRepository.findById(memberId).orElseThrow(NotExistMemberException::new);
+        if (!member.getUsername().equals(loginMember.getUsername())) {
+            throw new NotEqualMemberException();
+        }
+
+        member.changePassword(updatePassword);
     }
 
     private void isUniqueFinalCheck(Member member) {
