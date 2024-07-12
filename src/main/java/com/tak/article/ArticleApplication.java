@@ -1,5 +1,6 @@
 package com.tak.article;
 
+import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,8 +20,8 @@ public class ArticleApplication {
 	}
 
 	@Bean
-	public EntityManager entityManager(EntityManager em) {
-		return em;
+	public JPAQueryFactory entityManager(EntityManager em) {
+		return new JPAQueryFactory(em);
 	}
 
 }
