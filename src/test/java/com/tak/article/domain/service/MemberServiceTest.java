@@ -4,13 +4,12 @@ package com.tak.article.domain.service;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import com.tak.article.domain.member.entity.Member;
 import com.tak.article.domain.home.exception.LoginException;
 import com.tak.article.domain.home.exception.NotUniqueException;
 import com.tak.article.domain.home.form.LoginForm;
 import com.tak.article.domain.home.form.SignupForm;
+import com.tak.article.domain.member.entity.Member;
 import com.tak.article.domain.member.service.MemberService;
-import java.util.Optional;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,16 +30,16 @@ class MemberServiceTest {
         memberService.save(member);
 
         // id 로 조회
-        Optional<Member> resultA = memberService.findById(member.getId());
-        assertThat(resultA.orElse(null)).isEqualTo(member);
+        Member resultA = memberService.findById(member.getId());
+        assertThat(resultA).isEqualTo(member);
 
         // username 로 조회
-        Optional<Member> resultB = memberService.findByUsername(member.getUsername());
-        assertThat(resultB.orElse(null)).isEqualTo(member);
+        Member resultB = memberService.findByUsername(member.getUsername());
+        assertThat(resultB).isEqualTo(member);
 
         // nickname 로 조회
-        Optional<Member> resultC = memberService.findByNickname(member.getNickname());
-        assertThat(resultC.orElse(null)).isEqualTo(member);
+        Member resultC = memberService.findByNickname(member.getNickname());
+        assertThat(resultC).isEqualTo(member);
     }
 
     @Test
@@ -65,9 +64,9 @@ class MemberServiceTest {
         Member member = new Member(new SignupForm("user1", "123", "hello"));
         memberService.save(member);
 
-        Optional<Member> result = memberService.login(new LoginForm("user1", "123"));
+        Member result = memberService.login(new LoginForm("user1", "123"));
 
-        assertThat(result.get()).isEqualTo(member);
+        assertThat(result).isEqualTo(member);
     }
 
     @Test

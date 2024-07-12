@@ -1,11 +1,11 @@
 package com.tak.article.domain.member.service;
 
-import com.tak.article.domain.member.entity.Member;
 import com.tak.article.domain.home.exception.LoginException;
 import com.tak.article.domain.home.exception.NotUniqueException;
 import com.tak.article.domain.home.form.LoginForm;
+import com.tak.article.domain.member.entity.Member;
+import com.tak.article.domain.member.exception.NotExistMemberException;
 import com.tak.article.domain.member.repository.MemberRepository;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,22 +26,23 @@ public class MemberService {
 
     }
 
-    public Optional<Member> findById(Long id) {
-        return memberRepository.findById(id);
+    public Member findById(Long id) {
+        return memberRepository.findById(id).orElseThrow(NotExistMemberException::new);
     }
 
-    public Optional<Member> findByUsername(String username) {
-        return memberRepository.findByUsername(username);
+    public Member findByUsername(String username) {
+        return memberRepository.findByUsername(username).orElseThrow(NotExistMemberException::new);
     }
 
-    public Optional<Member> findByNickname(String nickname) {
-        return memberRepository.findByNickname(nickname);
+    public Member findByNickname(String nickname) {
+        return memberRepository.findByNickname(nickname).orElseThrow(NotExistMemberException::new);
     }
 
-    public Optional<Member> login(LoginForm form) {
-        Optional<Member> member = memberRepository.findByUsername(form.getUsername());
+    public Member login(LoginForm form) {
 
-        if (member.isEmpty() || !form.getPassword().equals(member.get().getPassword())) {
+        Member member = memberRepository.findByUsername(form.getUsername()).orElseThrow(LoginException::new);
+
+        if (!form.getPassword().equals(member.getPassword())) {
             throw new LoginException();
         }
 

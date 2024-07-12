@@ -10,11 +10,14 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MemberDto {
 
+
     public MemberDto(Member member) {
+        this.id = member.getId();
         this.username = member.getUsername();
         this.nickname = member.getNickname();
     }
 
+    private Long id;
     private String username;
     private String nickname;
 }

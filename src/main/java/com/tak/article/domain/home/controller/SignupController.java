@@ -5,9 +5,9 @@ import com.tak.article.domain.home.exception.NotUniqueException;
 import com.tak.article.domain.home.form.SignupForm;
 import com.tak.article.domain.home.response.SignupCheckResponse;
 import com.tak.article.domain.member.entity.Member;
+import com.tak.article.domain.member.exception.NotExistMemberException;
 import com.tak.article.domain.member.service.MemberService;
 import jakarta.validation.Valid;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -45,7 +45,7 @@ public class SignupController {
 
         try {
             memberService.save(new Member(form));
-            redirectAttributes.addFlashAttribute("success", true);
+            redirectAttributes.addFlashAttribute("signupSuccess", true);
             return "redirect:/login";
 
         } catch (NotUniqueException e) {
@@ -61,16 +61,20 @@ public class SignupController {
     }
 
     private ResponseEntity<SignupCheckResponse> checkUnique(String key, String value) {
-
-        Optional<Member> member;
         if (key.equals("username")) {
-            member = memberService.findByUsername(value);
-            return member.isPresent() ? ResponseEntity.ok(new SignupCheckResponse(false, "이미 존재하는 아이디입니다"))
-                    : ResponseEntity.ok(new SignupCheckResponse(true, "사용 가능한 아이디입니다."));
-        } else {
-            member = memberService.findByNickname(value);
-            return member.isPresent() ? ResponseEntity.ok(new SignupCheckResponse(false, "이미 존재하는 닉네임입니다"))
-                    : ResponseEntity.ok(new SignupCheckResponse(true, "사용 가능한 닉네임입니다."));
+            try {
+                memberService.findByUsername(value);
+                return ResponseEntity.ok(new SignupCheckResponse(false, "이미 존재하는 아이디입니다"));
+            } catch (NotExistMemberException e) {
+                ResponseEntity.ok(new SignupCheckResponse(true, "사용 가능한 아이디입니다."));
+            }
+        }
+
+        try {
+            memberService.findByNickname(value);
+            return ResponseEntity.ok(new SignupCheckResponse(false, "이미 존재하는 닉네임입니다"));
+        } catch (NotExistMemberException e) {
+            return ResponseEntity.ok(new SignupCheckResponse(true, "사용 가능한 닉네임입니다."));
         }
     }
 }

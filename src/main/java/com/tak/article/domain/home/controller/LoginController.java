@@ -10,7 +10,6 @@ import com.tak.article.domain.member.service.MemberService;
 import com.tak.article.domain.session.SessionConst;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -46,9 +45,7 @@ public class LoginController {
         }
 
         try {
-            Optional<Member> loginMember = memberService.login(form);
-
-            Member member = loginMember.orElseThrow(LoginException::new);
+            Member member = memberService.login(form);
             request.getSession().setAttribute(SessionConst.LOGIN_MEMBER, new MemberDto(member));
             return "redirect:" + redirectUrl;
         } catch (LoginException e) {
