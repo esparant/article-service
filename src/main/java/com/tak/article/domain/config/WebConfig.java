@@ -13,7 +13,7 @@ public class WebConfig implements WebMvcConfigurer {
             "/", "/error", "/login", "/signup", "/sign-up/check", "/**.ico"};
     private static final String[] MEMBER_PATTERNS = {
             "/", "/error", "/logout", "/article", "/post",
-            "/post/**", "/**.ico", "/search", "/comment/**"};
+            "/post/**", "/**.ico", "/search", "/comment/**", "/my-page", "/my-page/**"};
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

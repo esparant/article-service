@@ -25,12 +25,11 @@ public class MyPageController {
 
         try {
             Member member = memberService.findById(loginMember.getId());
+            model.addAttribute("member", member);
+            return "user/my-page";
         } catch (NotExistMemberException e) {
             redirectAttributes.addFlashAttribute("enterMyPageFail", true);
-            return "redirect:/logout";
+            return "redirect:/";
         }
-
-        model.addAttribute("member", loginMember);
-        return null;
     }
 }
