@@ -18,6 +18,9 @@
     <script th:if="${notExistComment}">
         alert('존재하지 않는 댓글 입니다.')
     </script>
+    <script th:if="${addCommentFail}">
+        alert('댓글을 입력해주세요.')
+    </script>
 </head>
 <body>
 <div th:replace="~{fragments/navbar :: nav}"></div>
@@ -136,7 +139,14 @@
     }
 
     function saveEdit(postId, commentId) {
-        const content = document.getElementById('editContent-' + commentId).value;
+        const contentElement = document.getElementById('editContent-' + commentId);
+        const content = contentElement.value.trim(); // 공백 제거
+
+        if (content === "") {
+            alert('댓글을 입력해주세요.');
+            return; // 폼 제출 중단
+        }
+
         $.ajax({
             url: '/post/' + postId + '/modify-comment/' + commentId,
             type: 'POST',
@@ -148,6 +158,7 @@
                     alert('존재하지 않는 댓글입니다.');
                     location.reload();  // 페이지 새로고침
                 } else {
+                    alert('수정이 완료되었습니다.')
                     document.getElementById('comment-' + commentId).innerText = content;
                     hideEditForm(commentId);
                 }

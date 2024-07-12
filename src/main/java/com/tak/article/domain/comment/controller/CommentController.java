@@ -31,8 +31,10 @@ public class CommentController {
                                RedirectAttributes redirectAttributes,
                                @PathVariable("id") Long postId) {
 
+
         if (bindingResult.hasErrors()) {
             ControllerMethod.getErrorInfo(bindingResult);
+            redirectAttributes.addFlashAttribute("addCommentFail", true);
             return "redirect:/post/" + postId;
         }
 
