@@ -161,10 +161,14 @@
     }
 
     function checkPasswords() {
+
         const passwordField = document.getElementById('password');
         const checkPasswordField = document.getElementById('checkPassword');
         const passwordLengthMessage = document.getElementById('passwordLengthMessage');
         const passwordMessage = document.getElementById('passwordMessage');
+
+        passwordField.value = passwordField.value.replace(/\s/g, '');
+        checkPasswordField.value = checkPasswordField.value.replace(/\s/g, '');
 
         const password = passwordField.value;
         const checkPassword = checkPasswordField.value;

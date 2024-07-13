@@ -9,6 +9,12 @@
     <script th:if="${signupSuccess}">
         alert('회원가입이 완료되었습니다.');
     </script>
+    <script>
+        function validatePassword() {
+            var passwordField = document.getElementById("password");
+            passwordField.value = passwordField.value.replace(/\s/g, '');
+        }
+    </script>
 </head>
 <body>
 <div th:replace="~{fragments/navbar :: nav}"></div>
@@ -18,7 +24,8 @@
        th:text="${err}">글로벌 에러 메시지</p>
     <input type="text" class="form-control mb-2" placeholder="아이디" th:field="*{username}">
     <p class="form-text text-danger" th:errors="*{username}">아이디 에러 메시지</p>
-    <input type="password" class="form-control mb-2" placeholder="비밀번호" th:field="*{password}">
+    <input type="password" class="form-control mb-2" placeholder="비밀번호" oninput="validatePassword()"
+           th:field="*{password}">
     <p class="form-text text-danger" th:errors="*{password}">비밀번호 에러 메시지</p>
     <button type="submit" class="btn btn-primary w-100 mb-2">로그인</button>
     <a href="/signup" class="btn btn-secondary w-100 mb-2" role="button">회원가입</a>

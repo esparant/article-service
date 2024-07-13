@@ -26,7 +26,7 @@
                 <div class="form-control-plaintext" th:text="*{formatedCreateDate()}"></div>
             </div>
             <div class="mb-3">
-                <strong>비밀번호:</strong>
+                <strong>비밀번호</strong>
                 <input type="password" th:value="*{password}" class="form-control text-center" readonly/>
             </div>
             <div class="mb-3">
@@ -34,12 +34,12 @@
             </div>
             <div id="passwordForm" class="mt-3" style="display: none;">
                 <div class="mb-3">
-                    <label for="newPassword">새 비밀번호:</label>
+                    <label for="newPassword">새 비밀번호</label>
                     <input type="password" id="newPassword" class="form-control">
                     <div id="passwordError" class="text-danger mt-2" style="display: none;">비밀번호는 3자 이상입니다.</div>
                 </div>
                 <div class="mb-3">
-                    <label for="confirmPassword">비밀번호 확인:</label>
+                    <label for="confirmPassword">비밀번호 확인</label>
                     <input type="password" id="confirmPassword" class="form-control">
                     <div id="confirmPasswordError" class="text-danger mt-2" style="display: none;">비밀번호가 일치하지 않습니다.
                     </div>
@@ -64,6 +64,11 @@
     }
 
     function validatePassword() {
+        var newPasswordField = document.getElementById("newPassword");
+        var confirmPasswordField = document.getElementById("confirmPassword");
+        newPasswordField.value = newPasswordField.value.replace(/\s/g, '');
+        confirmPasswordField.value = confirmPasswordField.value.replace(/\s/g, '');
+
         var newPassword = document.getElementById("newPassword").value;
         var confirmPassword = document.getElementById("confirmPassword").value;
         var passwordError = document.getElementById("passwordError");
