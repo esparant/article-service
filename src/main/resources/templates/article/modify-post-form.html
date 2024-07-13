@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <form method="post" th:object="${post}">
+    <form method="post" th:object="${post}" onsubmit="return validateForm()">
         <div class="mb-3">
             <label for="title" class="form-label">제목</label>
             <input type="text" class="form-control" id="title" name="title" th:field="*{title}" required>
@@ -27,7 +27,7 @@
             <textarea class="form-control" id="content" name="content" rows="10" th:field="*{content}" required></textarea>
         </div>
         <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-primary" onclick="return confirm('게시글을 수정하시겠습니까?')">수정</button>
+            <button type="submit" class="btn btn-primary">수정</button>
             <a th:href="@{/post/{id}(id=*{id})}" class="btn btn-secondary" style="margin-left: 10px" onclick="return confirm('수정을 취소하시겠습니까?')">취소</a>
         </div>
     </form>
@@ -37,4 +37,16 @@
         integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
         crossorigin="anonymous"></script>
 </body>
+<script>
+    function validateForm() {
+        var title = document.getElementById("title").value.trim();
+        var content = document.getElementById("content").value.trim();
+
+        if (title === "" || content === "") {
+            alert("제목과 내용을 입력하세요.");
+            return false;
+        }
+        return confirm('게시글을 수정하시겠습니까?');
+    }
+</script>
 </html>

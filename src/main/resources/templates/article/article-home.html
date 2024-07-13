@@ -31,7 +31,14 @@
     </div>
     <div class="d-flex justify-content-between align-items-center mb-3">
         <form th:action="@{/article}" method="get" class="input-group" style="max-width: 500px;">
-            <input type="text" th:value="${search}" name="search" class="form-control" placeholder="검색어를 입력하세요"
+            <select name="searchOption" class="form-select" aria-label="Search Type">
+                <option th:each="option : ${T(com.tak.article.domain.article.form.SearchOption).values()}"
+                        th:value="${option.name()}"
+                        th:text="${option.value}"
+                        th:selected="${search.searchOption == option.name()}">
+                </option>
+            </select>
+            <input type="text" th:value="${search.searchValue}" name="searchValue" class="form-control" placeholder="검색어를 입력하세요"
                    aria-label="Search" aria-describedby="button-search">
             <button class="btn btn-outline-secondary" type="submit" id="button-search">검색</button>
         </form>
@@ -51,7 +58,7 @@
         <tr th:each="post : ${posts}">
             <th scope="row" th:text="${post.id}">번호</th>
             <td><a th:href="@{'/post/' + ${post.id}}" th:text="${post.title}">제목</a></td>
-            <td th:text="${post.writer}">글쓴이</td>
+            <td th:text="${post.writer}">작성자</td>
             <td th:text="${post.views}">조회수</td>
             <td th:text="${post.formatedCreateDate()}"></td>
         </tr>

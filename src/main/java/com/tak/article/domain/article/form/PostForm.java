@@ -1,6 +1,7 @@
 package com.tak.article.domain.article.form;
 
 import com.tak.article.domain.article.entity.Post;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,9 @@ public class PostForm {
 
     private Long id;
 
+    @NotNull
     private String title;
+
+    @NotNull
     private String content;
 }

@@ -2,10 +2,12 @@ package com.tak.article.domain.article.controller;
 
 import com.tak.article.domain.article.entity.Post;
 import com.tak.article.domain.article.form.PostForm;
+import com.tak.article.domain.article.form.SearchForm;
 import com.tak.article.domain.article.service.ArticleService;
 import com.tak.article.domain.comment.form.CommentForm;
 import com.tak.article.domain.member.entity.dto.MemberDto;
 import com.tak.article.domain.session.SessionConst;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
@@ -29,11 +31,11 @@ public class ArticleController {
 
 
     @GetMapping("/article")
-    public String article(Model model, @ModelAttribute("search") String searchValue,
+    public String article(Model model, @ModelAttribute("search")SearchForm searchForm,
                           @RequestParam(value = "pageIdx", defaultValue = "0") int pageIdx) {
 
-        log.info("pageIdx = {}", pageIdx);
-        model.addAttribute("posts", articleService.searchPost(searchValue, PageRequest.of(pageIdx, 10)));
+        log.info("searchForm: {}", searchForm);
+        model.addAttribute("posts", articleService.searchPost(searchForm, PageRequest.of(pageIdx, 10)));
         model.addAttribute("currentGroup", pageIdx / 10);
         return "article/article-home";
     }
@@ -44,7 +46,7 @@ public class ArticleController {
     }
 
     @PostMapping("/post")
-    public String post(@ModelAttribute("form") PostForm form,
+    public String post(@Valid @ModelAttribute("form") PostForm form,
                        @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto,
                        RedirectAttributes redirectAttributes) {
 
@@ -58,10 +60,7 @@ public class ArticleController {
     public String getPost(@PathVariable("id") Long id, Model model,
                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto) {
 
-        Post post = articleService.getPost(id);
-        post.incrementViews();
-
-        model.addAttribute("post", post);
+        model.addAttribute("post", articleService.getPost(id));
         model.addAttribute("member", memberDto);
         model.addAttribute("comment", new CommentForm(memberDto.getNickname()));
         return "article/view";

@@ -3,6 +3,7 @@ package com.tak.article.domain.article.service;
 import com.tak.article.domain.article.entity.Post;
 import com.tak.article.domain.article.exception.NotExistPostException;
 import com.tak.article.domain.article.form.PostForm;
+import com.tak.article.domain.article.form.SearchForm;
 import com.tak.article.domain.article.repositoriy.ArticleRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,9 @@ public class ArticleService {
 
     @Transactional
     public Post getPost(Long id) {
-        return articleRepository.findById(id).orElseThrow(NotExistPostException::new);
+        Post post = articleRepository.findById(id).orElseThrow(NotExistPostException::new);
+        post.incrementViews();
+        return post;
     }
 
     public List<Post> getPostList() {
@@ -49,7 +52,7 @@ public class ArticleService {
         articleRepository.delete(original);
     }
 
-    public Page<Post> searchPost(String title, PageRequest pageRequest) {
-        return articleRepository.searchPage(title, pageRequest);
+    public Page<Post> searchPost(SearchForm searchForm, PageRequest pageRequest) {
+        return articleRepository.searchPage(searchForm, pageRequest);
     }
 }
