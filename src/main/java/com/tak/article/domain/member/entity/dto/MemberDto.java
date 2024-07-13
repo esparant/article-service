@@ -12,12 +12,16 @@ public class MemberDto {
 
 
     public MemberDto(Member member) {
-        this.id = member.getId();
-        this.username = member.getUsername();
-        this.nickname = member.getNickname();
+        id = member.getId();
+        username = member.getUsername();
+        nickname = member.getNickname();
+//        createdDate = member.getCreateDate();
+//        updatedDate = member.getUpdateDate();
     }
 
     private Long id;
     private String username;
     private String nickname;
+//    private LocalDateTime createdDate;
+//    private LocalDateTime updatedDate;
 }

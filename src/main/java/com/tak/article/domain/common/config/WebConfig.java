@@ -1,4 +1,4 @@
-package com.tak.article.domain.config;
+package com.tak.article.domain.common.config;
 
 import com.tak.article.domain.home.interceptor.LoginCheckInterceptor;
 import com.tak.article.domain.home.interceptor.LoginUserCheckInterceptor;

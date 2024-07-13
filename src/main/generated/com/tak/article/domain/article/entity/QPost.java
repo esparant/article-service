@@ -20,13 +20,21 @@ public class QPost extends EntityPathBase<Post> {
 
     public static final QPost post = new QPost("post");
 
+    public final QPostDateEntity _super = new QPostDateEntity(this);
+
     public final ListPath<com.tak.article.domain.comment.entity.Comment, com.tak.article.domain.comment.entity.QComment> comments = this.<com.tak.article.domain.comment.entity.Comment, com.tak.article.domain.comment.entity.QComment>createList("comments", com.tak.article.domain.comment.entity.Comment.class, com.tak.article.domain.comment.entity.QComment.class, PathInits.DIRECT2);
 
     public final StringPath content = createString("content");
 
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createDate = _super.createDate;
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath title = createString("title");
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> updateDate = _super.updateDate;
 
     public final NumberPath<Long> views = createNumber("views", Long.class);
 

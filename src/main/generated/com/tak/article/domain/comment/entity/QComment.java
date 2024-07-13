@@ -22,11 +22,19 @@ public class QComment extends EntityPathBase<Comment> {
 
     public static final QComment comment = new QComment("comment");
 
+    public final com.tak.article.domain.common.entity.QDateEntity _super = new com.tak.article.domain.common.entity.QDateEntity(this);
+
     public final StringPath content = createString("content");
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createDate = _super.createDate;
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final com.tak.article.domain.article.entity.QPost post;
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> updateDate = _super.updateDate;
 
     public final StringPath writer = createString("writer");
 

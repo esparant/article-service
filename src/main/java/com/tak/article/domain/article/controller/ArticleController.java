@@ -57,7 +57,11 @@ public class ArticleController {
     @GetMapping("/post/{id}")
     public String getPost(@PathVariable("id") Long id, Model model,
                           @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto) {
-        model.addAttribute("post", articleService.getPost(id));
+
+        Post post = articleService.getPost(id);
+        post.incrementViews();
+
+        model.addAttribute("post", post);
         model.addAttribute("member", memberDto);
         model.addAttribute("comment", new CommentForm(memberDto.getNickname()));
         return "article/view";

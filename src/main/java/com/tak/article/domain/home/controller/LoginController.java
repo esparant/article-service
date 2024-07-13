@@ -1,6 +1,6 @@
 package com.tak.article.domain.home.controller;
 
-import static com.tak.article.domain.func.ControllerMethod.getErrorInfo;
+import static com.tak.article.domain.common.method.ControllerMethod.getErrorInfo;
 
 import com.tak.article.domain.home.exception.LoginException;
 import com.tak.article.domain.home.form.LoginForm;

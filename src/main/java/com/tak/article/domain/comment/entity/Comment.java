@@ -2,6 +2,7 @@ package com.tak.article.domain.comment.entity;
 
 import com.tak.article.domain.article.entity.Post;
 import com.tak.article.domain.comment.form.CommentForm;
+import com.tak.article.domain.common.entity.DateEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -15,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment {
+public class Comment extends DateEntity {
 
     public Comment(CommentForm form) {
         this.content = form.getContent();

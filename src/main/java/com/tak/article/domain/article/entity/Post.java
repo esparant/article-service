@@ -9,6 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.OneToMany;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.AccessLevel;
@@ -18,11 +19,11 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Post {
+public class Post extends PostDateEntity {
 
     public Post(PostForm form, MemberDto dto) {
-        this.title = form.getTitle();
-        this.content = form.getContent();
+        title = form.getTitle();
+        content = form.getContent();
         writer = dto.getNickname();
         views = 0L;
     }
@@ -57,9 +58,11 @@ public class Post {
     public void modifyPost(PostForm form) {
         title = form.getTitle();
         content = form.getContent();
+        setUpdateDate(LocalDateTime.now());
     }
 
     public void removeComment(Comment comment) {
         comments.remove(comment);
     }
+
 }

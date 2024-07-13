@@ -22,6 +22,10 @@
                 <div class="form-control-plaintext" th:text="*{nickname}"></div>
             </div>
             <div class="mb-3">
+                <strong>가입일</strong>
+                <div class="form-control-plaintext" th:text="*{formatedCreateDate()}"></div>
+            </div>
+            <div class="mb-3">
                 <strong>비밀번호:</strong>
                 <input type="password" th:value="*{password}" class="form-control text-center" readonly/>
             </div>

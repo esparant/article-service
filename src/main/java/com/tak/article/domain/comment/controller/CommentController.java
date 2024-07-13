@@ -5,7 +5,7 @@ import com.tak.article.domain.comment.entity.Comment;
 import com.tak.article.domain.comment.exception.NotExistCommentException;
 import com.tak.article.domain.comment.form.CommentForm;
 import com.tak.article.domain.comment.service.CommentService;
-import com.tak.article.domain.func.ControllerMethod;
+import com.tak.article.domain.common.method.ControllerMethod;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

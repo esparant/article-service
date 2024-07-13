@@ -23,10 +23,7 @@ public class ArticleService {
 
     @Transactional
     public Post getPost(Long id) {
-        Post post = articleRepository.findById(id).orElseThrow(NotExistPostException::new);
-        post.incrementViews();
-        log.info("views {}", post.getViews());
-        return post;
+        return articleRepository.findById(id).orElseThrow(NotExistPostException::new);
     }
 
     public List<Post> getPostList() {

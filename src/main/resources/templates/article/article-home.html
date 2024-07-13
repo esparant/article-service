@@ -44,6 +44,7 @@
             <th scope="col">제목</th>
             <th scope="col">글쓴이</th>
             <th scope="col">조회수</th>
+            <th scope="col">작성일</th>
         </tr>
         </thead>
         <tbody>
@@ -52,6 +53,7 @@
             <td><a th:href="@{'/post/' + ${post.id}}" th:text="${post.title}">제목</a></td>
             <td th:text="${post.writer}">글쓴이</td>
             <td th:text="${post.views}">조회수</td>
+            <td th:text="${post.formatedCreateDate()}"></td>
         </tr>
         </tbody>
     </table>

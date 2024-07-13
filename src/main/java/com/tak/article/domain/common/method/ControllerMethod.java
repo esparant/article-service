@@ -1,4 +1,4 @@
-package com.tak.article.domain.func;
+package com.tak.article.domain.common.method;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.validation.BindingResult;
