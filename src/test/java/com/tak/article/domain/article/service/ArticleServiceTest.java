@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import com.tak.article.domain.article.entity.Post;
 import com.tak.article.domain.article.form.PostForm;
+import com.tak.article.domain.article.form.SearchForm;
+import com.tak.article.domain.article.form.SearchOption;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,11 +65,11 @@ class ArticleServiceTest {
         articleService.savePost(new Post("hello2", "hello2", "me2"));
         articleService.savePost(new Post("hello3", "hello3", "me3"));
 
-        Page<Post> resultA = articleService.searchPost("hello2", PageRequest.of(0, 10));
+        Page<Post> resultA = articleService.searchPost(new SearchForm(SearchOption.TITLE, "hello3"), PageRequest.of(0, 10));
         assertThat(resultA.getTotalElements()).isEqualTo(1);
         assertThat(resultA.getTotalPages()).isEqualTo(1);
 
-        Page<Post> resultB = articleService.searchPost("hello", PageRequest.of(0, 10));
+        Page<Post> resultB = articleService.searchPost(new SearchForm(SearchOption.TITLE, "hello"), PageRequest.of(0, 10));
         assertThat(resultB.getTotalElements()).isEqualTo(3);
 
     }
