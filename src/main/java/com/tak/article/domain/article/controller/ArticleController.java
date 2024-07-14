@@ -96,6 +96,7 @@ public class ArticleController {
 
         redirectAttributes.addFlashAttribute("invalidAccess", true);
         return "redirect:/article";
+
     }
 
     @DeleteMapping("/post/delete/{id}")
