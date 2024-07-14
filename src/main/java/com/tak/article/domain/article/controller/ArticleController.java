@@ -50,10 +50,11 @@ public class ArticleController {
                        @SessionAttribute(name = SessionConst.LOGIN_MEMBER, required = false) MemberDto memberDto,
                        RedirectAttributes redirectAttributes) {
 
-        articleService.savePost(new Post(form, memberDto));
+        Post post = articleService.savePost(new Post(form, memberDto));
+
 
         redirectAttributes.addFlashAttribute("writeSuccess", true);
-        return "redirect:/article";
+        return "redirect:/post/" + post.getId();
     }
 
     @GetMapping("/post/{id}")
